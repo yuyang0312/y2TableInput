@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="../Script/y2js/y2TableInput.css" />
+    <script src="../Script/y2js/y2TableInput.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <br />
+    <div id="rq" ></div>
+    <script>
+        var rq = document.getElementById('rq');
+        var config = {
+            head: [{ text: "字段一" }, { text: "字段二" }, { text: "字段三" }, { text: "字段四" }]
+        }
+        console.log(y2TIFactory(config))
+        rq.appendChild(y2TIFactory(config).node);
+    </script>
+</body>
+</html>
