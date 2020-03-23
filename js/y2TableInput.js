@@ -44,11 +44,13 @@
 
     // 创建
     function createY2TableInput(config) {
-        var div = y2AppendChild(y2CreateElement("div", { className: "y2_tableInput_wrapper" }),
-            initHead(config.head),
-            initBody(config.body));
-        div[0].style.width = config.width + 'px';
-        return div[0];
+        var div = y2CreateElement("div", { className: "y2_tableInput_wrapper" });
+        var head = initHead(config.head);
+        var body = initBody(config.head);
+        div.style.width = config.width + 'px';
+        div.appendChild(head);
+        div.appendChild(body)
+        return div;
 
     }
 
@@ -58,7 +60,6 @@
             var tr = y2CreateElement('tr',{className:"y2_tableInput_head_tr"}),td = null;
             for(var i = 0; i < headConfig.length; i++){
                 td = y2CreateElement('td');
-                console.log(headConfig[i]["width"]);
                 td.style.width = headConfig[i]["width"];
                 td.innerText = headConfig[i]["text"];
                 tr.appendChild(td);
@@ -71,7 +72,6 @@
                     if (!isstretching) {
                         if (e.offsetX < 3 || e.offsetX > (this.clientWidth - 3)) {
                             this.style.cursor = "col-resize";
-                            console.log(e.offsetX)
                             if (e.offsetX < 3) ps = "left";
                             else ps = "right";
                         } else {
@@ -83,7 +83,6 @@
                 document.onmousemove = function (e) {
                     e = e || window.event;
                     if (isstretching) {
-                        //console.log(ps, e.clientX - targetTd.offsetLeft );
                         if (ps == "left" && (targetTd.clientWidth + targetTd.offsetLeft - e.clientX > 20)) {
                             lineLeft.style.left = e.clientX + "px";
                         }
@@ -95,9 +94,16 @@
 
                 td.onmousedown = function (e) {
                     e = e || window.event;
+                    // 先获取y2_tableInput_wrapper的父元素的offsetLeft的合计
+                    var offsetParent = 0;
+                    var pNode = this;
+                    while (pNode) {
+                        offsetParent += pNode.offsetLeft || 0;
+                        pNode = pNode.offsetParent;
+                    }
                     if (this.style.cursor == "col-resize") {                        
-                        lineLeft.style.left = (this.offsetLeft) + "px";
-                        lineRight.style.left = (this.offsetLeft + this.clientWidth) + "px";
+                        lineLeft.style.left = offsetParent + "px";
+                        lineRight.style.left = (offsetParent + this.clientWidth) + "px";
                         document.body.appendChild(lineLeft);
                         document.body.appendChild(lineRight);
                         isstretching = true;
@@ -113,7 +119,6 @@
                         while (targetTable && targetTable.nodeName.toLowerCase() != "table") {
                             targetTable = targetTable.parentNode;
                         }
-                        console.log(targetTable)
                         targetTable.style.width += (lineRight.style.left.replace('px', '') - lineLeft.style.left.replace('px', '') - 2) - targetTd.style.width.replace("px","") + 'px';
                         targetTd.style.width = (lineRight.style.left.replace('px', '') - lineLeft.style.left.replace('px', '') - 2) + 'px'; // 2 是paddingleft的值
                                               
@@ -140,20 +145,120 @@
         var tbody = y2CreateElement("tbody", { className: "y2_tableInput_body"})
         if (bodyConfig) {
             var tr = y2CreateElement('tr'), td = null;
+            tbody.appendChild(tr);
             if (data && data.length > 0) {
 
             } else {
                 // 填一条空数据
                 for (var i = 0; i < bodyConfig.length; i++) {
                     td = y2CreateElement('td');
-
+                    td.style.width = bodyConfig[i].width;
+                    td.setAttribute("data-ctype", "input");
+                    td.setAttribute("data-editable", "y");
+                    td.onclick = function (e) {
+                        tdOnClick(e);
+                    }
+                    tr.appendChild(td);
                 }
             }
         } else {
 
 
         }
-        return tbody;
+       
+        return y2AppendChild(y2CreateElement('div', { className: "y2_tableInput_body_div" }),
+            y2CreateElement('table', { className: "y2_tableInput_body_table " }),
+            tbody)[0];
+    }
+
+    function tdOnClick(e) {
+        var e = e || window.event;
+        var target = e.srcElement || e.target;
+        focusOn(target);
+    }
+
+    /**
+     * 将焦点置于目标元素，使得该元素处于可编辑状态
+     * @param {any} target 目标td
+     */
+    function focusOn(target) {
+        console.log(target);
+        var ctype = target.getAttribute("data-ctype");
+        var ele = null;
+        var value = target.innerHTML;
+        target.innerHTML = "";
+        switch (ctype) {
+            case "input":
+                ele = y2CreateElement("input", { className: "y2Input" });
+                ele.value = value;
+                ele.onkeydown = function (e) {
+                    var e = e || window.event;
+                    var keyCode = e.keyCode;
+                    if (keyCode == "13") {
+                        var value = this.value;                        
+                        this.parentNode.removeChild(this);
+                        target.innerHTML = value;
+                        moveCursor(target, "r", 1);
+                    }
+                }
+                target.appendChild(ele);
+                ele.focus();
+                break;
+            default:
+                ele = y2CreateElement("input", { className: "y2Input" })
+                break;
+        }
+    }
+
+    /**
+     * 移动光标
+     * @param {any} now  现在所处位置
+     * @param {any} direction  移动方向 lrtb 上下左右 
+     * @param {any} count   移动格数 
+     */
+    function moveCursor(now, direction, count) {
+        var target = null;
+        while (now && now.nodeName.toLowerCase() != "td") {
+            now = now.parentNode;
+        }
+        if (now) {
+            // 左
+            if (direction === "l") {
+                if (getPrevNode(now)) {
+                    target = getPrevNode(now);
+                } else {
+                    var tr = now.parentNode;
+                    if (getPrevNode(tr)) {
+                        var prevTds = getPrevNode(tr).getElementsByTagName("td");
+                        for (var i = prevTds.length; i > -1; i--) {
+                            if (prevTds[i].getAttribute("data-editable") === "y") {
+                                target = prevTds[i];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            // 右
+            if (direction === "r") {
+                if (getNextNode(now)) {
+                    target = getNextNode(now);
+                } else {
+                    var tr = now.parentNode;
+                    if (getNextNode(tr)) {
+                        var nextTds = getNextNode(tr).getElementsByTagName("td");
+                        for (var i = 0; i < nextTds.length; i++) {
+                            if (nextTds[i].getAttribute("data-editable") === "y") {
+                                target = nextTds[i];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            target && focusOn(target);
+        }
     }
 
     // 根据类型创建控件
@@ -189,6 +294,17 @@
         }
         return temp;
     }
+
+    //获取上一个兄弟节点
+    function getPrevNode(n) {
+        return n.previousElementSibling || n.previousSibling;
+    }
+
+    //获取下一个兄弟节点
+    function getNextNode(n) {
+        return n.nextElementSibling || n.nextSibling;
+    }
+
 
     // 创建元素
     function y2CreateElement(tag,attr,props){
