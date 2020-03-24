@@ -14,13 +14,17 @@
 <body>
     <br />
     <div id="rq" ></div>
+    <button onclick="get()">aaa</button>
     <script>
         var rq = document.getElementById('rq');
         var config = {
-            head: [{ text: "字段一" }, { text: "字段二" }, { text: "字段三" }, { text: "字段四" }]
+            field: [{ text: "字段一", field: "field1" }, { text: "字段二", field: "field2" }, { text: "字段三", field: "field3" }, { text: "字段四", field: "field4" }]
         }
-        console.log(y2TIFactory(config))
-        rq.appendChild(y2TIFactory(config).node);
+        var m1 = y2TIFactory(config);
+        rq.appendChild(m1.node);
+        function get() {
+            console.log(m1.getData());
+        }
     </script>
 </body>
 </html>

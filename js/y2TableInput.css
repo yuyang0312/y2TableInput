@@ -29,12 +29,11 @@
     }
 
     .y2_tableInput_wrapper .y2_tableInput_body td {
-        font: bold 13px/15px helvetica, arial, verdana, sans-serif;
+        font:  13px/15px helvetica, arial, verdana, sans-serif;
         border: 0.5px solid #C0C0C0;
         height: 2em;
         line-height: 2em;
         padding-left: 2px;
-        padding:0 3px;
     }
 
     .y2_tableInput_line {
@@ -47,4 +46,15 @@
     .y2_tableInput_wrapper .y2Input {
         width:100%;
         border:none;
+        height:25px;
     }
+
+    .y2_tableInput_wrapper .y2_tableInput_body_index {
+        background-color: #F5F5F5;
+        text-align: center;
+        color: #666;
+        cursor:pointer;
+    }
+.y2_tableInput_wrapper .y2_tableInput_body .y2_tableInput_editingTr td {
+    background-color: #C1DDF1;
+}
