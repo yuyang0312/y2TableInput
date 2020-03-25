@@ -13,28 +13,29 @@
         padding-right:17px;
     }
 
-    .y2_tableInput_wrapper .y2_tableInput_head_tr td {
-        background-color: #F5F5F5;
-        font: bold 13px/15px helvetica, arial, verdana, sans-serif;
-        border: 0.5px solid #C0C0C0;
-        border-bottom:none;
-        height: 2em;
-        line-height: 2em;
-        padding-left: 2px;
-        color: #666;
-        /*禁止文本被选中*/
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-    }
+        .y2_tableInput_wrapper .y2_tableInput_head_tr td {
+            background-color: #F5F5F5;
+            font: bold 13px/15px helvetica, arial, verdana, sans-serif;
+            border: 0.5px solid #C0C0C0;
+            border-bottom: none;
+            height: 2em;
+            line-height: 2em;
+            padding: 0 0 0 2px;
+            color: #666;
+            /*禁止文本被选中*/
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
 
-    .y2_tableInput_wrapper .y2_tableInput_body td {
-        font:  13px/15px helvetica, arial, verdana, sans-serif;
-        border: 0.5px solid #C0C0C0;
-        height: 2em;
-        line-height: 2em;
-        padding-left: 2px;
-    }
+        .y2_tableInput_wrapper .y2_tableInput_body td {
+            font: 13px/15px helvetica, arial, verdana, sans-serif;
+            border: 0.5px solid #C0C0C0;
+            height: 2em;
+            line-height: 2em;
+            padding: 0 0 0 2px;
+            /*padding-left: 2px;*/
+        }
 
     .y2_tableInput_line {
         width: 1px;
@@ -46,14 +47,15 @@
     .y2_tableInput_wrapper .y2Input {
         width:100%;
         border:none;
-        height:25px;
+        height:23px;
     }
 
-    .y2_tableInput_wrapper .y2_tableInput_body_index {
+    .y2_tableInput_wrapper .y2_tableInput_body_index, .y2_tableInput_wrapper .y2_tableInput_head_index {
         background-color: #F5F5F5;
         text-align: center;
         color: #666;
-        cursor:pointer;
+        cursor: pointer;
+        padding: 0 !important;
     }
 .y2_tableInput_wrapper .y2_tableInput_body .y2_tableInput_editingTr td {
     background-color: #C1DDF1;

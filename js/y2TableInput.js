@@ -137,11 +137,19 @@
     //初始化width宽度
     function initWidth(config) {
         if (!config) return;
+        var tableWidth = 0;
         for (var i = 0; i < config.field.length; i++) {
             config.field[i].width = config.field[i].width || "100px";
             config.width = (config.width || 0) + (config.field[i].width.replace('px', '') * 1);
+            tableWidth += config.field[i].width.replace('px', '') * 1;
         }
         config.width += 17;
+        if (!config.tableWidth) {
+            if (config.isIndexCol) {
+                tableWidth = tableWidth + 30;
+            }
+            config.tableWidth = tableWidth + 30;
+        }
     }
 
     function initModalTr(config) {
@@ -194,6 +202,7 @@
             if (y2TI.config.isIndexCol) {
                 var td = y2CreateElement("td", { className: "y2_tableInput_head_index" })
                 td.style.width = "30px";
+                td.innerHTML = "<div style='width:100%'><div>";
                 tr.appendChild(td);
             }
             for(var i = 0; i < headConfig.length; i++){
@@ -273,7 +282,7 @@
                 tr);
 
             // 尾部再加上滚动条宽度的空白
-
+            eleList[1].style.width = y2TI.config.tableWidth + 'px';
             return eleList[0];
         } 
     }
@@ -283,7 +292,10 @@
         var fieldConfig = y2TI.config.fieldConfig,
             data = y2TI.data;
             modalTr = y2TI.config.modalTr;
-        var tbody = y2CreateElement("tbody", { className: "y2_tableInput_body"})
+        var tbody = y2CreateElement("tbody", { className: "y2_tableInput_body" });
+        var div = y2AppendChild(y2CreateElement('div', { className: "y2_tableInput_body_div" }),
+            y2CreateElement('table', { className: "y2_tableInput_body_table " }),
+            tbody);
         for (var i = 0; i < data.length; i++) {
             var tr = modalTr.cloneNode(true);
             tr.setAttribute("data-index", i);           
@@ -291,19 +303,17 @@
                 datai = data[i],
                 startIndex = 0;
             if (y2TI.config.isIndexCol) {
-                tds[0].innerHTML = (i + 1);
+                tds[0].innerHTML = "<div>" + (i + 1) + "</div>";
                 startIndex = 1;
-            }
-            tbody.appendChild(tr);            
+            }         
             for (var j = startIndex; j < tds.length; j++) {
                 var field = tds[j].getAttribute("data-field");
                 var value = datai[field];
                 toggleTdStatus(tds[j], "display", y2TI);
             }
-        }
-        var div = y2AppendChild(y2CreateElement('div', { className: "y2_tableInput_body_div" }),
-            y2CreateElement('table', { className: "y2_tableInput_body_table " }),
-            tbody);
+            tbody.appendChild(tr);
+        }      
+        div[1].style.width = y2TI.config.tableWidth + 'px';
         div[1].onclick = function (e) {
             onTableClick(e, y2TI);
         }
@@ -322,7 +332,7 @@
         newTr.setAttribute("data-index", tbody.getElementsByTagName("tr").length);
         toggelEditingTr(newTr, y2TI);
         if (y2TI.config.isIndexCol) {
-            newTr.getElementsByTagName("td")[0].innerHTML = tbody.getElementsByTagName("tr").length + 1;
+            newTr.getElementsByTagName("td")[0].innerHTML = "<div>" + (tbody.getElementsByTagName("tr").length + 1) + "</div>";
         }
         if (type === 0) {
             y2TI.data.push(deepCloneObj(y2TI.config.modalData));
@@ -375,16 +385,20 @@
      */
     function toggleTdStatus(td, status, y2TI) {
         var tr = td.parentNode;
-        var index = tr.getAttribute("data-Index")
-        var value = changeUN(y2TI.data[index][td.getAttribute("data-field")]);
-        if (status === "display") {
-            td.innerHTML = "";
-            var div = y2CreateElement("div", { className:"y2_tableInput_body_display" });
-            div.innerHTML = value;
-            td.appendChild(div);
-        }
-        if (status === "input") {
-            focusOn(td, value, y2TI);
+        var dataStatus = td.getAttribute("data-status");
+        if (dataStatus != status) {
+            var index = tr.getAttribute("data-Index")
+            var value = changeUN(y2TI.data[index][td.getAttribute("data-field")]);        
+            td.setAttribute("data-status", status);
+            if (status === "display") {
+                td.innerHTML = "";
+                var div = y2CreateElement("div", { className: "y2_tableInput_body_display" });
+                div.innerHTML = value;
+                td.appendChild(div);
+            }
+            if (status === "input") {
+                focusOn(td, value, y2TI);
+            }
         }
     }
 
@@ -395,9 +409,14 @@
     function onTdClick(e, y2TI) {
         var e = e || window.event;
         var target = e.srcElement || e.target;
+        while (target && target.nodeName.toLowerCase() !== "td") {
+            target = target.parentNode;
+        }
         if (hasClass(target, "y2_tableInput_body_display")) target = target.parentNode;
         toggelEditingTr(target.parentNode,y2TI);
-        if (!hasClass(target, "y2_tableInput_body_index"))  toggleTdStatus(target, "input", y2TI);
+        if (!hasClass(target, "y2_tableInput_body_index")) {
+            toggleTdStatus(target, "input", y2TI);
+        }
     }
 
     // 将tr设置为选中状态
@@ -424,11 +443,35 @@
                 ele.onkeydown = function (e) {
                     var e = e || window.event;
                     var keyCode = e.keyCode;
-                    if (keyCode == "13") {         
+                    if (keyCode == "13" || keyCode == "9") {
                         setValue(target, this.value, y2TI);
                         toggleTdStatus(target, "display", y2TI);
                         moveCursor(target, "r", 1, y2TI);
+                        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                    } else if (keyCode == "37") {// 左
+                        var poistion = getTxt1CursorPosition(this)
+                        if (poistion == 0) {
+                            setValue(target, this.value, y2TI);
+                            toggleTdStatus(target, "display", y2TI);
+                            moveCursor(target, "l", 1, y2TI);
+                        }
+                    } else if (keyCode == "38") {// 上
+                        setValue(target, this.value, y2TI);
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "t", 1, y2TI);
+                    } else if (keyCode == "39") {// 右
+                        var poistion = getTxt1CursorPosition(this)
+                        if (!this.value || this.value.length === poistion) {
+                            setValue(target, this.value, y2TI);
+                            toggleTdStatus(target, "display", y2TI);
+                            moveCursor(target, "r", 1, y2TI);
+                        }
+                    } else if (keyCode == "40") {// 下
+                        setValue(target, this.value, y2TI);
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "b", 1, y2TI);
                     }
+                   
                 }
                 ele.onblur = function () {
                     setValue(target, this.value, y2TI);
@@ -472,12 +515,13 @@
             now = now.parentNode;
         }
         if (now) {
+            var tr = now.parentNode;
             // 左
             if (direction === "l") {
-                if (getPrevNode(now)) {
+                if (getPrevNode(now) && !hasClass(getPrevNode(now),"y2_tableInput_body_index")) {
                     target = getPrevNode(now);
                 } else {
-                    var tr = now.parentNode;
+                    
                     if (getPrevNode(tr)) {
                         var prevTds = getPrevNode(tr).getElementsByTagName("td");
                         for (var i = prevTds.length; i > -1; i--) {
@@ -494,7 +538,6 @@
                 if (getNextNode(now)) {
                     target = getNextNode(now);
                 } else {
-                    var tr = now.parentNode;
                     if (getNextNode(tr)) {
                         var nextTds = getNextNode(tr).getElementsByTagName("td");
                         for (var i = 0; i < nextTds.length; i++) {
@@ -515,7 +558,29 @@
                     }
                 }
             }
-            
+            // 上
+            if (direction === "t") {               
+                if (getPrevNode(tr)) {
+                    var tds = getPrevNode(tr).getElementsByTagName("td");
+                    for (var i = 0; i < tds.length; i++) {
+                        if (tds[i].getAttribute("data-field") == now.getAttribute("data-field")) {
+                            target = tds[i];
+                            break;
+                        }
+                    }
+                }
+            }
+            // 下
+            if (direction === "b") {
+                if (!getNextNode(tr)) addRow(y2TI,0);
+                var tds = getNextNode(tr).getElementsByTagName("td");
+                for (var i = 0; i < tds.length; i++) {
+                    if (tds[i].getAttribute("data-field") == now.getAttribute("data-field")) {
+                        target = tds[i];
+                        break;
+                    }
+                }                
+            }
             target && toggleTdStatus(target, "input", y2TI);
         }
     }
@@ -557,6 +622,24 @@
             }
         }
         return temp;
+    }
+
+    //光标在字符串位置
+    function getTxt1CursorPosition(ele) {
+        var cursurPosition = 0;
+        if (ele.selectionStart) {//非IE
+            cursurPosition = ele.selectionStart;
+        } else {//IE
+            try {
+                var range = document.selection.createRange();
+                range.moveStart("character", -ele.value.length);
+                cursurPosition = range.text.length;
+
+            } catch (e) {
+                cursurPosition = 0;
+            }
+        }
+        return cursurPosition;//打印当前索引
     }
 
     //对象深克隆
