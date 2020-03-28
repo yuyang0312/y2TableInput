@@ -2,9 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
     <title></title>
     <link rel="stylesheet" href="../js/y2TableInput.css" />
     <script src="../js/y2TableInput.js"></script>
+    <script src="../plugins/jquery-1.10.2.min.js"></script>
+    <link href="../plugins/select2/select2.css" rel="stylesheet" />
+    <script src="../plugins/select2/select2.js"></script>
     <style>
         #rq {
             margin-left: 100px
@@ -13,12 +17,40 @@
 </head>
 <body>
     <br />
-    <div id="rq" ></div>
+    <div id="rq"></div>
+    <select class="js-example-basic-single" style="width:200px" name="state">
+        <option value="AL">Alabama</option>
+        <option value="AL">Alabama1</option>
+        <option value="AL">Alabama2</option>
+        <option value="AL">Alabama3</option>
+        <option value="AL">Alabama2</option>
+        <option value="AL">Alabama3</option>
+        <option value="AL">Alabama2</option>
+        <option value="AL">Alabama3</option>
+        <option value="AL">Alabama2</option>
+        <option value="AL">Alabama3</option>
+        <option value="AL">Alabama2</option>
+        <option value="AL">Alabama3</option>
+        <option value="AL">Alabama2</option>
+        <option value="AL">Alabama3</option>
+        <option value="WY">Wyoming</option>
+    </select>
     <button onclick="get()">aaa</button>
     <script>
+        $(document).ready(function () {
+            $('.js-example-basic-single').select2();
+        });
         var rq = document.getElementById('rq');
         var config = {
-            field: [{ text: "字段一", field: "field1" }, { text: "字段二", field: "field2" }, { text: "字段三", field: "field3" }, { text: "字段四", field: "field4" }]
+            field: [{ text: "字段一", field: "field1" },
+                {
+                    text: "字段二", field: "field2", cType: "select", bindData: [{ value: "1", label: "label1" },
+                        { value: "2", label: "label2" },
+                        { value: "3", label: "label3" },
+                        { value: "4", label: "label4" }]
+                },
+                { text: "字段三", field: "field3" },
+                { text: "字段四", field: "field4" }]
         }
         var m1 = y2TIFactory(config);
         rq.appendChild(m1.node);

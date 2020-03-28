@@ -165,7 +165,7 @@
             var td = y2CreateElement('td');
             td.style.width = fieldConfig[j].width;
             td.setAttribute("data-field", fieldConfig[j]["field"])
-            td.setAttribute("data-ctype", "input");
+            td.setAttribute("data-ctype", fieldConfig[j]["cType"] || "input");
             td.setAttribute("data-editable", "y");
             tr.appendChild(td);
         }
@@ -366,7 +366,6 @@
         var trs = tbody.getElementsByTagName("tr");
         for (var i = 0; i < trs.length; i++) {            
             var tr = trs[i];
-            console.log(tr.getAttribute("data-index"), i)
             if (tr.getAttribute("data-index") != i) {               
                 tr.setAttribute("data-index", i);
                 var first = tr.getElementsByTagName("td")[0];
@@ -433,6 +432,7 @@
      * @param {any} target 目标td
      */
     function focusOn(target, value, y2TI) {
+        var field = target.getAttribute("data-field");
         var ctype = target.getAttribute("data-ctype");
         var ele = null;
         target.innerHTML = "";
@@ -480,10 +480,30 @@
                 target.appendChild(ele);
                 ele.focus();
                 break;
+            case 'select':
+                var bindData = null;
+                for (var i = 0, fieldConfig = y2TI.config.field; i < fieldConfig.length; i++) {
+                    if (fieldConfig[i].field == field) {
+                        bindData = fieldConfig[i].bindData || [];
+                        break;
+                    }
+                }
+                
+                ele = buildSelect(bindData);
+                target.appendChild(ele);
+                $(ele).select2();
+                $(ele).on("select2:close", function (e) {
+                })
+                ele.click();
+                break;
             default:
                 ele = y2CreateElement("input", { className: "y2Input" })
                 break;
         }
+        
+        
+        
+        
     }
 
     /**
@@ -594,6 +614,26 @@
     }
 
 
+    /**
+     * 创建控件区域
+     * 
+     */
+
+    function buildSelect(bindData,y2TI) {
+        var ele = y2CreateElement("select", { className:"y2Select" });
+        if (bindData) {
+            for (var i = 0; i < bindData.length; i++) {
+                var option = y2CreateElement("option");
+                option.value = bindData[i]["value"];
+                option.innerHTML = bindData[i]["label"];
+                ele.appendChild(option);
+            }
+        }
+        //ele.onselect = function () {
+        //    alert(1)
+        //}
+        return ele;
+    }
     /**
      *  基础方法
      * 

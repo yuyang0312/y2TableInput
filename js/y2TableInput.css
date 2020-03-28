@@ -49,6 +49,11 @@
         border:none;
         height:23px;
     }
+.y2_tableInput_wrapper .y2Select {
+    width: 100% !important;
+    border: none;
+    height: 23px;
+}
 
     .y2_tableInput_wrapper .y2_tableInput_body_index, .y2_tableInput_wrapper .y2_tableInput_head_index {
         background-color: #F5F5F5;
