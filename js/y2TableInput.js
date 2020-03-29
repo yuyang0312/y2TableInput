@@ -493,8 +493,10 @@
                 target.appendChild(ele);
                 $(ele).select2();
                 $(ele).on("select2:close", function (e) {
+                    console.log(e)
+                    moveCursor(target, "r", 1, y2TI);
                 })
-                ele.click();
+                $(ele).select2("open");
                 break;
             default:
                 ele = y2CreateElement("input", { className: "y2Input" })
