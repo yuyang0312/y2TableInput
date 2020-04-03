@@ -16,7 +16,7 @@
         .y2_tableInput_wrapper .y2_tableInput_head_tr td {
             background-color: #F5F5F5;
             font: bold 13px/15px helvetica, arial, verdana, sans-serif;
-            border: 0.5px solid #C0C0C0;
+            border: 0.5pt solid #C0C0C0;
             border-bottom: none;
             height: 2em;
             line-height: 2em;
@@ -29,13 +29,23 @@
         }
 
         .y2_tableInput_wrapper .y2_tableInput_body td {
-            font: 13px/15px helvetica, arial, verdana, sans-serif;
-            border: 0.5px solid #C0C0C0;
-            height: 2em;
-            line-height: 2em;
+            /*font:  helvetica, arial, verdana, sans-serif;*/
+            border: 0.5pt solid #C0C0C0;
+            height: 25px;
+            line-height: 25px;
             padding: 0 0 0 2px;
             /*padding-left: 2px;*/
         }
+
+    .y2_tableInput_wrapper .y2_tableInput_foot_tr td {
+        /*font: 13px/15px helvetica, arial, verdana, sans-serif;*/
+        border: 0.5pt solid #C0C0C0;
+        border-top: none;
+        height: 28px;
+        line-height: 28px;
+        padding: 0 0 0 2px;
+        /*padding-left: 2px;*/
+    }
 
     .y2_tableInput_line {
         width: 1px;
@@ -44,18 +54,20 @@
         position: absolute;
         z-index: 5;
     }
-    .y2_tableInput_wrapper .y2Input {
-        width:100%;
-        border:none;
-        height:23px;
-    }
+.y2_tableInput_wrapper .y2Input {
+    width: 100%;
+    border: none;
+    height: 20px;
+    line-height: 20px;
+}
 .y2_tableInput_wrapper .y2Select {
     width: 100% !important;
     border: none;
-    height: 23px;
+    height: 97%;
 }
 
-    .y2_tableInput_wrapper .y2_tableInput_body_index, .y2_tableInput_wrapper .y2_tableInput_head_index {
+    .y2_tableInput_wrapper .y2_tableInput_body_index,
+    .y2_tableInput_wrapper .y2_tableInput_head_index {
         background-color: #F5F5F5;
         text-align: center;
         color: #666;
@@ -64,4 +76,22 @@
     }
 .y2_tableInput_wrapper .y2_tableInput_body .y2_tableInput_editingTr td {
     background-color: #C1DDF1;
+}
+
+
+/*select2 ÑùÊ½¼æÈÝ*/
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    left: auto !important;
+    /*top: auto !important;*/
+}
+.select2-search--dropdown .select2-search__field {
+    width: 85% !important;
+}
+.select2-results__option {
+    text-align:left;
+}
+
+.select2 span {
+    height:22px !important;
+    line-height:22px !important;
 }
