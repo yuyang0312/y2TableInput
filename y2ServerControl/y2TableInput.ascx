@@ -6,6 +6,8 @@
 <link href="../../Script/plugins/select2/select2.css" rel="stylesheet" />
 <script src="../../Script/plugins/select2/select2.js"></script>
 <div id="rq"></div>
+<input type="hidden" id ="hid_allRecords" runat="server"/>
+<input type="hidden" id ="hid_jsonRecords" runat="server"/>
 <script>
     var y2data = <%=GetData()%>; // 数据 
     var hidden = "<%=GetColHiddens()%>"; // 隐藏列
@@ -18,6 +20,7 @@
     var colValidations = "<%=GetColValidations()%>"; //验证规则 0-不验证,1-不空,2-整数,3-实数,12-不空且整数,13-不空且实数
     var colComputeFormulaString = "<%=GetColComputeFormulaString()%>"; //"2,{4}={2}+{3}◆3,{4}={2}+{3}"
     var colChooseString = "<%=GetColChooseString()%>";
+    var colWidths = "<%=GetColWidths()%>";
     // 处理以前的版本参数
     function forwardCompatible() {
         hidden = hidden.split(",");
@@ -29,6 +32,7 @@
         if (colValidations) colValidations = colValidations.split(",");
         if (colComputeFormulaString) colComputeFormulaString = colComputeFormulaString.split("◆");
         if (colChooseString) colChooseString = colChooseString.split("◆");
+        if (colWidths) colWidths = colWidths.split(",");
         var field = [];
         if (y2data.length > 0) {
             var index = 0 , selectIndex = 0;
@@ -46,6 +50,9 @@
                     switch (colControlType[i]) {
                         case "1":
                             obj["cType"] = "input";
+                            break;
+                        case "2":
+                            obj["cType"] = "date";
                             break;
                         case "3":
                             obj["cType"] = "select";
@@ -65,6 +72,9 @@
                 if (colCopys) {
                     obj["copy"] = colCopys[i];
                 }
+                if (colWidths) {
+                    obj["width"] = colWidths[i];
+                }
                 if (colValidations) {
                     var validationType = "any";
                     if (colValidations[i] == "2" || colValidations[i] == "12") {
@@ -79,6 +89,7 @@
                     }
                 }
                 if (colSummaryString) {
+                     hasSum = true;
                     for (var j = 0; j < colSummaryString.length; j++) {
                         if (colSummaryString[j].split('◇')[1] == i) {
                             obj["isSum"] = true;
@@ -86,7 +97,7 @@
                     }
                 }
                 if (colChooseString) {
-                    for (var j = 0; j < colChooseString.split("◆"); j++) {
+                    for (var j = 0; j < colChooseString.length; j++) {
                         var colChooseArray = colChooseString[j].split("◇");
                         if (i == colChooseArray[0]) {
                             field[i]["cType"] = "choosePage";
@@ -149,9 +160,21 @@
     var rq = document.getElementById('rq');
     var config = {
         field:y2field,
-        data:y2data
+        data: y2data,
+        hasSum:hasSum
     }
     var m1 = y2TIFactory(config);
+    function getData() {
+        if (m1.validateAll()) {
+            var value = m1.getData();
+            var json = m1.getData('json');
+            document.getElementById("<%=hid_allRecords.ClientID  %>").value = value;
+            document.getElementById("<%=hid_jsonRecords.ClientID  %>").value = json;
+            return value;
+        } else {
+            return false;
+        }
+    }
     rq.appendChild(m1.node);
 </script>
 

@@ -11,14 +11,13 @@
 	using System.Web.UI.WebControls;
 	using System.Web.UI.WebControls.WebParts;
 	using System.Web.UI.HtmlControls;
-    using Newtonsoft.Json.Linq;
-    using Newtonsoft.Json;
-    using Microsoft.ApplicationBlocks.Data;
+
+	using Microsoft.ApplicationBlocks.Data;
 	using System.Data.SqlClient;
 	using jr.Source;
 
 	[Serializable] 
-	public partial class y2TableInput : System.Web.UI.UserControl
+	public partial class TableInput : System.Web.UI.UserControl
 	{
 		private SqlParameter[] parParms;		//SQL参数
 		/// <summary>
@@ -44,14 +43,13 @@
 		public string colAjaxString = "";//Ajax参数
 		public string colDetailString = "";//明细链接
 		public string colOperationString = "";//操作 000 对应 增删明细（1-显示，0-不显示）
-		public JArray selectArray = new JArray();//下拉框数据源字符串
+		public string selectString = "";//下拉框数据源字符串
 		public string checkboxString = "";//复选框
 		public string colHiddens = "";//列掩藏属性字符串组合(0-不掩藏,1-掩藏),中间以逗号分隔
 		public string colCopys = "";//列掩藏属性字符串组合(0-不掩藏,1-掩藏),中间以逗号分隔
 		public string colCodes = "";//列自动编码属性字符串组合(0-不自动编码,1-自动编码),中间以逗号分隔
 		public string colWidths = "";//列长度属性字符串组合(px或者%都可以),中间以逗号分隔
 		public string colComputeString = "";//列计算属性字符串组合(计算列,计算列,结果列◆计算列,计算列,结果列),数量*单价=金额
-        public string colEventString = "";//添加事件
 		public string colComputeFormulaString = "";//列计算属性字符串组合(计算列,计算公式◆计算列,计算公式),动态公式
 		public string colSelectIdString = "";//当前选中行的指定获取第几列的ID值，默认为0即序号列的ID值
 		public string colTabIndexs = "";//列Tab索引属性字符串组合(0-默认,-1-排除,大于1-索引值),中间以逗号分隔
@@ -79,13 +77,13 @@
 				//}
 				////dataString = hid_allRecords.Value.Trim();
 
-				//string temp = hid_allRecords.Value.Trim();
+				string temp = hid_allRecords.Value.Trim();
 
 				//rowcount = Convert.ToInt32(hid_rowCount.Value.Trim());
-				//rowcount = Convert.ToInt32(hid_rowCount.Value.Trim() == "" ? "0" : hid_rowCount.Value.Trim());
+				rowcount = Convert.ToInt32(hid_rowCount.Value.Trim() == "" ? "0" : hid_rowCount.Value.Trim());
 
-				dataString = hid_jsonRecords.Value.Trim();
-            }           
+				dataString = temp.Replace('◇', '◆');
+			}           
 
 		}
 
@@ -105,21 +103,20 @@
 				rowcount = ds.Tables[0].Rows.Count;
 				colcount = ds.Tables[0].Columns.Count;
 				dataString = "";
-                dataString = JsonConvert.SerializeObject(ds.Tables[0]);
-                //hid_rowCount.Value = rowcount.ToString();
+				//hid_rowCount.Value = rowcount.ToString();
 
-                //for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                //{
-                //	for (int j = 0; j < ds.Tables[0].Columns.Count; j++)
-                //	{
-                //		dataString = dataString + ds.Tables[0].Rows[i][j].ToString().Trim() + "◆";
-                //	}
-                //}
-                //dataString = dataString.Replace("\"", "＂");//双引号替换为半角双引号，前台都是用脚本写的，双引号易导致错误
-                //dataString = dataString.Replace("\r\n", " ");//双引号替换为半角双引号，前台都是用脚本写的，双引号易导致错误
-                //dataString = dataString.Replace("\"", "\\\"");
-                //Response.Write("dataString:" + dataString);
-            }
+				for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+				{
+					for (int j = 0; j < ds.Tables[0].Columns.Count; j++)
+					{
+						dataString = dataString + ds.Tables[0].Rows[i][j].ToString().Trim() + "◆";
+					}
+				}
+				dataString = dataString.Replace("\"", "＂");//双引号替换为半角双引号，前台都是用脚本写的，双引号易导致错误
+				dataString = dataString.Replace("\r\n", " ");//双引号替换为半角双引号，前台都是用脚本写的，双引号易导致错误
+				//dataString = dataString.Replace("\"", "\\\"");
+				//Response.Write("dataString:" + dataString);
+			}
 			if (ds.Tables[0].Columns.Count > 0)
 			{
 				for (int i = 0; i < ds.Tables[0].Columns.Count; i++)
@@ -130,9 +127,9 @@
 				headersString = headersString.Replace("\"", "＂");
 			}
 
-			//hid_rowCount.Value = rowcount.ToString();
-			//hid_colCount.Value = colcount.ToString();
-			//hid_allRecords.Value = dataString;
+			hid_rowCount.Value = rowcount.ToString();
+			hid_colCount.Value = colcount.ToString();
+			hid_allRecords.Value = dataString;
 
 			SetViewState();
 		}
@@ -156,9 +153,9 @@
 			string [] temp=headers.Split('◆');
 			rowcount = 0;
 			colcount = temp.Length;
-			//hid_rowCount.Value = rowcount.ToString();
-			//hid_colCount.Value = colcount.ToString();
-			//hid_allRecords.Value = dataString;
+			hid_rowCount.Value = rowcount.ToString();
+			hid_colCount.Value = colcount.ToString();
+			hid_allRecords.Value = dataString;
 			SetViewState();
 		}
 
@@ -171,6 +168,7 @@
 
 		public void FillSelectByProcWithHead(String procedureName, SqlParameter[] arParms)
 		{
+			selectString = selectString + " , ;";
 			FillSelectByProc(procedureName,arParms);
 		}
 
@@ -182,6 +180,7 @@
 
 		public void FillSelectBySqlWithHead(String sql)
 		{
+			selectString = selectString + " , ;";
 			FillSelectBySql(sql);
 		}
 
@@ -192,17 +191,42 @@
 			DataSet ds = new DataSet();
 			if (sSelectProcedureName != null)
 			{
-				ds = Selection.exeProc(sSelectProcedureName, selectParms);				
+				ds = Selection.exeProc(sSelectProcedureName, selectParms);
+				if (ds.Tables[0].Rows.Count > 0)
+				{
+					for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+					{
+						for (int j = 0; j < ds.Tables[0].Columns.Count; j++)
+						{
+							selectString = selectString + ds.Tables[0].Rows[i][j].ToString().Trim() + ",";
+						}
+						selectString = selectString.Substring(0, selectString.Length - 1);
+						selectString = selectString + ";";
+					}
+					//selectString = selectString + "◆";//放到ds.Tables[0].Rows.Count >0 外面上
+				}
+				selectString = selectString + "◆";
 			}
 			if (sSelectSql != null)
 			{
 				ds = Selection.exeSql(sSelectSql);
+				if (ds.Tables[0].Rows.Count > 0)
+				{
+					for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+					{
+						for (int j = 0; j < ds.Tables[0].Columns.Count; j++)
+						{
+							selectString = selectString + ds.Tables[0].Rows[i][j].ToString().Trim() + ",";
+						}
+						selectString = selectString.Substring(0, selectString.Length - 1);
+						selectString = selectString + ";";
+					}
+					//selectString = selectString + "◆";//放到ds.Tables[0].Rows.Count >0 外面上
+				}
+				selectString = selectString + "◆";
 			}
-            for (int i = 0; i < ds.Tables.Count; i++) {
-                JArray jo = (JArray)JsonConvert.DeserializeObject(JsonConvert.SerializeObject(ds.Tables[i]));
-                selectArray.Add(jo);
-            }
-            SetViewState();
+
+			SetViewState();
 
 		}
 
@@ -269,8 +293,8 @@
 		{
 			//if (isPost == '0')
 				//GetDataSourse();
-			//dataString = dataString.Replace("\"", "＂");//双引号替换为半角双引号，前台都是用脚本写的，双引号易导致错误
-			//dataString = dataString.Replace("\"", "\\\"");
+			dataString = dataString.Replace("\"", "＂");//双引号替换为半角双引号，前台都是用脚本写的，双引号易导致错误
+			dataString = dataString.Replace("\"", "\\\"");
 			//Response.Write("dataString:" + dataString);
 			return dataString;
 		}
@@ -369,7 +393,7 @@
 		{
 			//GetSelectDataSourse();
 			//GetSelectDataSourse();
-			return JsonConvert.SerializeObject(selectArray);
+			return selectString;
 		}
 		public string GetcheckboxSourseString()
 		{
@@ -675,7 +699,7 @@
 			ViewState["colAjaxString"] = colAjaxString;
 			ViewState["colDetailString"] = colDetailString;
 			ViewState["colOperationString"] = colOperationString;
-			ViewState["selectArray"] = JsonConvert.SerializeObject(selectArray);
+			ViewState["selectString"] = selectString;
 			ViewState["checkboxString"] = checkboxString;
 			ViewState["colHiddens"] = colHiddens;
 			ViewState["colCopys"] = colCopys;
@@ -705,7 +729,7 @@
 			ViewState["colAjaxString"] = "";
 			ViewState["colDetailString"] = "";
 			ViewState["colOperationString"] = "";
-			ViewState["selectArray"] = "";
+			ViewState["selectString"] = "";
 			ViewState["checkboxString"] = "";
 			ViewState["colHiddens"] = "";
 			ViewState["colCopys"] = "";
@@ -784,9 +808,10 @@
 			{
 				colOperationString = ViewState["colOperationString"].ToString().Trim();
 			}
-			if (ViewState["selectArray"] != null)
+			if (ViewState["selectString"] != null)
 			{
-                selectArray =  (JArray)JsonConvert.DeserializeObject(ViewState["selectArray"].ToString().Trim());
+				selectString = ViewState["selectString"].ToString().Trim();
+                if (selectString == "◆") selectString = "";
 			}
 			if (ViewState["checkboxString"] != null)
 			{
@@ -829,22 +854,19 @@
 		/// <returns></returns>
 		protected string GetAllRecordsClientId()
 		{
-            //return hid_allRecords.ClientID;
-            //return hid_allRecords.UniqueID;
-            return "";
+			//return hid_allRecords.ClientID;
+			return hid_allRecords.UniqueID;        
 		}
 
 		protected string GetRowCountClientId()
 		{
-            //return hid_rowCount.ClientID;
-            //return hid_rowCount.UniqueID;
-            return "";
-        }
+			//return hid_rowCount.ClientID;
+			return hid_rowCount.UniqueID;
+		}
 
 		protected string GetAddButtonClientId()
 		{
-            //return btnAddRow.UniqueID;
-            return "";
-        }
+			return btnAddRow.UniqueID;
+		}
 	}
 }
