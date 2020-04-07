@@ -17,15 +17,17 @@
             background-color: #F5F5F5;
             font: bold 13px/15px helvetica, arial, verdana, sans-serif;
             border: 0.5pt solid #C0C0C0;
-            border-bottom: none;
-            height: 2em;
-            line-height: 2em;
-            padding: 0 0 0 2px;
+            border-bottom: none;                
+            padding: 8px 0 8px 2px;
             color: #666;
             /*禁止文本被选中*/
+            moz-user-select: -moz-none;
             -moz-user-select: none;
-            -webkit-user-select: none;
-            user-select: none;
+            -o-user-select: none;
+            -khtml-user-select: none; /* you could also put this in a class */
+            -webkit-user-select: none; /* and add the CSS class here instead */
+            -ms-user-select: none;
+            user-select: none; /**禁止选中文字*/
         }
 
         .y2_tableInput_wrapper .y2_tableInput_body td {
@@ -34,6 +36,7 @@
             height: 25px;
             line-height: 25px;
             padding: 0 0 0 2px;
+
             /*padding-left: 2px;*/
         }
 
@@ -47,14 +50,15 @@
         /*padding-left: 2px;*/
     }
 
-    .y2_tableInput_line {
-        width: 1px;
-        height: 100%;
-        background-color: black;
-        position: absolute;
-        z-index: 5;
-    }
-.y2_tableInput_wrapper .y2Input {
+.y2_tableInput_line {
+    width: 1px;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    z-index: 5;
+    _height: expression(this.parentNode.offsetHeight+"px"); /*如果报了奇怪的错误，请检查我*/
+}
+.y2_tableInput_wrapper .y2Input, .y2_select_search_input {
     width: 100%;
     border: none;
     height: 20px;
@@ -65,33 +69,184 @@
     border: none;
     height: 97%;
 }
+.y2_tableInput_wrapper .y2_tableInput_oddRow {
+    background-color: #F5F5F5;
+}
 
-    .y2_tableInput_wrapper .y2_tableInput_body_index,
-    .y2_tableInput_wrapper .y2_tableInput_head_index {
-        background-color: #F5F5F5;
-        text-align: center;
-        color: #666;
-        cursor: pointer;
-        padding: 0 !important;
-    }
-.y2_tableInput_wrapper .y2_tableInput_body .y2_tableInput_editingTr td {
+.y2_tableInput_wrapper .y2_tableInput_body_index,
+.y2_tableInput_wrapper .y2_tableInput_head_index {
+    background-color: #F5F5F5;
+    text-align: center;
+    color: #666;
+    cursor: pointer;
+    padding: 0 !important;
+}
+.y2_tableInput_wrapper .y2_tableInput_body .y2_tableInput_checkedTr td {
     background-color: #C1DDF1;
 }
+.y2_tableInput_wrapper .y2_tableInput_body .y2_tableInput_illtd {
+    border-left:1px solid red;
+}
+/*设置界面*/
+.y2_tableInput_configdiv {
+    overflow:auto;
+}
+.y2_tableInput_configdiv label {
+    background-color: #F5F5F5;
+    width: 100%;
+    height: 2em;
+    font: bold 13px/15px helvetica, arial, verdana, sans-serif;
+    line-height: 2em;
+    padding-left: 12px;
+}
+.y2_tableInput_configdiv ul {
+    text-align: left;
+    list-style: none;
+    overflow: auto;   
+    cursor: pointer;
+}
+
+.y2_tableInput_configdiv ul li {
+    width: 100%;
+    word-break: break-all;
+    padding-bottom:10px;
+}
+
+.y2_tableInput_configdiv ul table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-top:10px;
+}
+
+.y2_tableInput_configdiv ul table .label {
+    text-align: right;
+    padding-right:10px;
+}
+
+.y2_tableInput_configdiv ul li select{
+    width: 120px;
+}
+
+/*select 样式兼容*/
+.y2_select {
+    height: 23px !important;
+    border: 1px solid #ccc !important;
+    /*padding: 3px;*/
+}
+
+.y2_select_opinions {
+    position: absolute;
+    width: 98%;
+    background-color: #FFF !important;
+    border: 1px solid #ccc !important;
+    top: 22px;
+    left: 0;
+    z-index: 5;
+}
+
+.y2_select li {
+    list-style: none;
+    display: block;
+    cursor: pointer;
+    padding: 3px 2px;
+    margin: 0 4px;
+}
+
+    .y2_select li:hover {
+        background-color: #E5E5E5;
+    }
+
+.y2_select span {
+    display: inline-block;
+    width: 70%;
+    line-height: 23px;
+    margin-left: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all; /* 不换行 */
+    white-space: nowrap;
+}
+
+.y2_select i {
+    display: inline-block;
+    width: 0;
+    margin: 0 auto;
+    border: 4px solid;
+    border-color: #000 transparent transparent transparent;
+    /*vertical-align: -2px;*/
+    position: relative;
+    top: 10px;
+    height: 0;
+}
+
+.y2_select p {
+    float: right;
+    height: 100%;
+    width: 20%;
+    /*padding-top: 10px;
+            >paddint-top:0;*/
+    cursor: pointer;
+    text-align: center;
+}
+
+.y2_select_warpper {
+    /*margin:100px auto;*/
+    width: 98%;
+    text-align: left;
+    display: inline-block;
+    position:relative;
+}
+
+.y2_select_search {
+    border: 1px solid #ccc !important;
+    border-radius: 5px;
+    margin: 5px 1px;
+    padding: 3px;
+    width: auto !important;
+}
+
+.y2_select_search img {
+    width: 18px;
+    height: 18px;
+    float: right;
+}
+
+.y2_select_search_input {
+    border: none;
+    width: 95%;
+    background-color: #FFF !important;
+    margin: 0 !important;
+}
+
+.y2_select_ul {
+    height: 200px;
+    overflow: scroll;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    background-color: #FFF;
+    margin: 0 1px;
+}
 
 
-/*select2 样式兼容*/
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    left: auto !important;
-    /*top: auto !important;*/
-}
-.select2-search--dropdown .select2-search__field {
-    width: 85% !important;
-}
-.select2-results__option {
-    text-align:left;
+.y2_select_ul::-webkit-scrollbar { /*滚动条整体样式*/
+    width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
 }
 
-.select2 span {
-    height:22px !important;
-    line-height:22px !important;
+.y2_select_ul::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #470719;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+}
+
+.y2_select_ul::-webkit-scrollbar-track { /*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    background: #EDEDED;
+}
+
+.y2_select_ul li:focus {
+    background-color: #E5E5E5;
 }

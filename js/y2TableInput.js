@@ -1,4 +1,84 @@
-﻿// 键盘事件处理库
+﻿
+/*
+ * Json
+ * /
+/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
+(function () {
+    function N(p, r) {
+        function q(a) {
+            if (q[a] !== w) return q[a]; var c; if ("bug-string-char-index" == a) c = "a" != "a"[0]; else if ("json" == a) c = q("json-stringify") && q("json-parse"); else {
+                var e; if ("json-stringify" == a) {
+                    c = r.stringify; var b = "function" == typeof c && s; if (b) {
+                        (e = function () { return 1 }).toJSON = e; try {
+                            b = "0" === c(0) && "0" === c(new t) && '""' == c(new A) && c(u) === w && c(w) === w && c() === w && "1" === c(e) && "[1]" == c([e]) && "[null]" == c([w]) && "null" == c(null) && "[null,null,null]" == c([w, u, null]) && '{"a":[1,true,false,null,"\\u0000\\b\\n\\f\\r\\t"]}' ==
+                                c({ a: [e, !0, !1, null, "\x00\b\n\f\r\t"] }) && "1" === c(null, e) && "[\n 1,\n 2\n]" == c([1, 2], null, 1) && '"-271821-04-20T00:00:00.000Z"' == c(new C(-864E13)) && '"+275760-09-13T00:00:00.000Z"' == c(new C(864E13)) && '"-000001-01-01T00:00:00.000Z"' == c(new C(-621987552E5)) && '"1969-12-31T23:59:59.999Z"' == c(new C(-1))
+                        } catch (f) { b = !1 }
+                    } c = b
+                } if ("json-parse" == a) {
+                    c = r.parse; if ("function" == typeof c) try {
+                        if (0 === c("0") && !c(!1)) {
+                            e = c('{"a":[1,true,false,null,"\\u0000\\b\\n\\f\\r\\t"]}'); var n = 5 == e.a.length && 1 === e.a[0]; if (n) {
+                                try { n = !c('"\t"') } catch (d) { } if (n) try {
+                                    n =
+                                        1 !== c("01")
+                                } catch (g) { } if (n) try { n = 1 !== c("1.") } catch (m) { }
+                            }
+                        }
+                    } catch (X) { n = !1 } c = n
+                }
+            } return q[a] = !!c
+        } p || (p = k.Object()); r || (r = k.Object()); var t = p.Number || k.Number, A = p.String || k.String, H = p.Object || k.Object, C = p.Date || k.Date, G = p.SyntaxError || k.SyntaxError, K = p.TypeError || k.TypeError, L = p.Math || k.Math, I = p.JSON || k.JSON; "object" == typeof I && I && (r.stringify = I.stringify, r.parse = I.parse); var H = H.prototype, u = H.toString, v, B, w, s = new C(-0xc782b5b800cec); try {
+            s = -109252 == s.getUTCFullYear() && 0 === s.getUTCMonth() && 1 === s.getUTCDate() &&
+                10 == s.getUTCHours() && 37 == s.getUTCMinutes() && 6 == s.getUTCSeconds() && 708 == s.getUTCMilliseconds()
+        } catch (Q) { } if (!q("json")) {
+            var D = q("bug-string-char-index"); if (!s) var x = L.floor, M = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334], E = function (a, c) { return M[c] + 365 * (a - 1970) + x((a - 1969 + (c = +(1 < c))) / 4) - x((a - 1901 + c) / 100) + x((a - 1601 + c) / 400) }; (v = H.hasOwnProperty) || (v = function (a) {
+                var c = {}, e; (c.__proto__ = null, c.__proto__ = { toString: 1 }, c).toString != u ? v = function (a) {
+                    var c = this.__proto__; a = a in (this.__proto__ = null, this); this.__proto__ =
+                        c; return a
+                } : (e = c.constructor, v = function (a) { var c = (this.constructor || e).prototype; return a in this && !(a in c && this[a] === c[a]) }); c = null; return v.call(this, a)
+            }); B = function (a, c) {
+                var e = 0, b, f, n; (b = function () { this.valueOf = 0 }).prototype.valueOf = 0; f = new b; for (n in f) v.call(f, n) && e++; b = f = null; e ? B = 2 == e ? function (a, c) { var e = {}, b = "[object Function]" == u.call(a), f; for (f in a) b && "prototype" == f || v.call(e, f) || !(e[f] = 1) || !v.call(a, f) || c(f) } : function (a, c) {
+                    var e = "[object Function]" == u.call(a), b, f; for (b in a) e && "prototype" ==
+                        b || !v.call(a, b) || (f = "constructor" === b) || c(b); (f || v.call(a, b = "constructor")) && c(b)
+                } : (f = "valueOf toString toLocaleString propertyIsEnumerable isPrototypeOf hasOwnProperty constructor".split(" "), B = function (a, c) { var e = "[object Function]" == u.call(a), b, h = !e && "function" != typeof a.constructor && F[typeof a.hasOwnProperty] && a.hasOwnProperty || v; for (b in a) e && "prototype" == b || !h.call(a, b) || c(b); for (e = f.length; b = f[--e]; h.call(a, b) && c(b)); }); return B(a, c)
+            }; if (!q("json-stringify")) {
+                var U = {
+                    92: "\\\\", 34: '\\"', 8: "\\b",
+                    12: "\\f", 10: "\\n", 13: "\\r", 9: "\\t"
+                }, y = function (a, c) { return ("000000" + (c || 0)).slice(-a) }, R = function (a) { for (var c = '"', b = 0, h = a.length, f = !D || 10 < h, n = f && (D ? a.split("") : a); b < h; b++) { var d = a.charCodeAt(b); switch (d) { case 8: case 9: case 10: case 12: case 13: case 34: case 92: c += U[d]; break; default: if (32 > d) { c += "\\u00" + y(2, d.toString(16)); break } c += f ? n[b] : a.charAt(b) } } return c + '"' }, O = function (a, c, b, h, f, n, d) {
+                    var g, m, k, l, p, r, s, t, q; try { g = c[a] } catch (z) { } if ("object" == typeof g && g) if (m = u.call(g), "[object Date]" != m || v.call(g,
+                        "toJSON")) "function" == typeof g.toJSON && ("[object Number]" != m && "[object String]" != m && "[object Array]" != m || v.call(g, "toJSON")) && (g = g.toJSON(a)); else if (g > -1 / 0 && g < 1 / 0) {
+                            if (E) { l = x(g / 864E5); for (m = x(l / 365.2425) + 1970 - 1; E(m + 1, 0) <= l; m++); for (k = x((l - E(m, 0)) / 30.42); E(m, k + 1) <= l; k++); l = 1 + l - E(m, k); p = (g % 864E5 + 864E5) % 864E5; r = x(p / 36E5) % 24; s = x(p / 6E4) % 60; t = x(p / 1E3) % 60; p %= 1E3 } else m = g.getUTCFullYear(), k = g.getUTCMonth(), l = g.getUTCDate(), r = g.getUTCHours(), s = g.getUTCMinutes(), t = g.getUTCSeconds(), p = g.getUTCMilliseconds();
+                            g = (0 >= m || 1E4 <= m ? (0 > m ? "-" : "+") + y(6, 0 > m ? -m : m) : y(4, m)) + "-" + y(2, k + 1) + "-" + y(2, l) + "T" + y(2, r) + ":" + y(2, s) + ":" + y(2, t) + "." + y(3, p) + "Z"
+                        } else g = null; b && (g = b.call(c, a, g)); if (null === g) return "null"; m = u.call(g); if ("[object Boolean]" == m) return "" + g; if ("[object Number]" == m) return g > -1 / 0 && g < 1 / 0 ? "" + g : "null"; if ("[object String]" == m) return R("" + g); if ("object" == typeof g) {
+                            for (a = d.length; a--;)if (d[a] === g) throw K(); d.push(g); q = []; c = n; n += f; if ("[object Array]" == m) {
+                                k = 0; for (a = g.length; k < a; k++)m = O(k, g, b, h, f, n, d), q.push(m === w ? "null" :
+                                    m); a = q.length ? f ? "[\n" + n + q.join(",\n" + n) + "\n" + c + "]" : "[" + q.join(",") + "]" : "[]"
+                            } else B(h || g, function (a) { var c = O(a, g, b, h, f, n, d); c !== w && q.push(R(a) + ":" + (f ? " " : "") + c) }), a = q.length ? f ? "{\n" + n + q.join(",\n" + n) + "\n" + c + "}" : "{" + q.join(",") + "}" : "{}"; d.pop(); return a
+                        }
+                }; r.stringify = function (a, c, b) {
+                    var h, f, n, d; if (F[typeof c] && c) if ("[object Function]" == (d = u.call(c))) f = c; else if ("[object Array]" == d) { n = {}; for (var g = 0, k = c.length, l; g < k; l = c[g++], (d = u.call(l), "[object String]" == d || "[object Number]" == d) && (n[l] = 1)); } if (b) if ("[object Number]" ==
+                        (d = u.call(b))) { if (0 < (b -= b % 1)) for (h = "", 10 < b && (b = 10); h.length < b; h += " "); } else "[object String]" == d && (h = 10 >= b.length ? b : b.slice(0, 10)); return O("", (l = {}, l[""] = a, l), f, n, h, "", [])
+                }
+            } if (!q("json-parse")) {
+                var V = A.fromCharCode, W = { 92: "\\", 34: '"', 47: "/", 98: "\b", 116: "\t", 110: "\n", 102: "\f", 114: "\r" }, b, J, l = function () { b = J = null; throw G(); }, z = function () {
+                    for (var a = J, c = a.length, e, h, f, k, d; b < c;)switch (d = a.charCodeAt(b), d) {
+                        case 9: case 10: case 13: case 32: b++; break; case 123: case 125: case 91: case 93: case 58: case 44: return e =
+                            D ? a.charAt(b) : a[b], b++ , e; case 34: e = "@"; for (b++; b < c;)if (d = a.charCodeAt(b), 32 > d) l(); else if (92 == d) switch (d = a.charCodeAt(++b), d) { case 92: case 34: case 47: case 98: case 116: case 110: case 102: case 114: e += W[d]; b++; break; case 117: h = ++b; for (f = b + 4; b < f; b++)d = a.charCodeAt(b), 48 <= d && 57 >= d || 97 <= d && 102 >= d || 65 <= d && 70 >= d || l(); e += V("0x" + a.slice(h, b)); break; default: l() } else { if (34 == d) break; d = a.charCodeAt(b); for (h = b; 32 <= d && 92 != d && 34 != d;)d = a.charCodeAt(++b); e += a.slice(h, b) } if (34 == a.charCodeAt(b)) return b++ , e; l(); default: h =
+                                b; 45 == d && (k = !0, d = a.charCodeAt(++b)); if (48 <= d && 57 >= d) { for (48 == d && (d = a.charCodeAt(b + 1), 48 <= d && 57 >= d) && l(); b < c && (d = a.charCodeAt(b), 48 <= d && 57 >= d); b++); if (46 == a.charCodeAt(b)) { for (f = ++b; f < c && (d = a.charCodeAt(f), 48 <= d && 57 >= d); f++); f == b && l(); b = f } d = a.charCodeAt(b); if (101 == d || 69 == d) { d = a.charCodeAt(++b); 43 != d && 45 != d || b++; for (f = b; f < c && (d = a.charCodeAt(f), 48 <= d && 57 >= d); f++); f == b && l(); b = f } return +a.slice(h, b) } k && l(); if ("true" == a.slice(b, b + 4)) return b += 4, !0; if ("false" == a.slice(b, b + 5)) return b += 5, !1; if ("null" == a.slice(b,
+                                    b + 4)) return b += 4, null; l()
+                    }return "$"
+                }, P = function (a) { var c, b; "$" == a && l(); if ("string" == typeof a) { if ("@" == (D ? a.charAt(0) : a[0])) return a.slice(1); if ("[" == a) { for (c = []; ; b || (b = !0)) { a = z(); if ("]" == a) break; b && ("," == a ? (a = z(), "]" == a && l()) : l()); "," == a && l(); c.push(P(a)) } return c } if ("{" == a) { for (c = {}; ; b || (b = !0)) { a = z(); if ("}" == a) break; b && ("," == a ? (a = z(), "}" == a && l()) : l()); "," != a && "string" == typeof a && "@" == (D ? a.charAt(0) : a[0]) && ":" == z() || l(); c[a.slice(1)] = P(z()) } return c } l() } return a }, T = function (a, b, e) {
+                    e = S(a, b, e); e ===
+                        w ? delete a[b] : a[b] = e
+                }, S = function (a, b, e) { var h = a[b], f; if ("object" == typeof h && h) if ("[object Array]" == u.call(h)) for (f = h.length; f--;)T(h, f, e); else B(h, function (a) { T(h, a, e) }); return e.call(a, b, h) }; r.parse = function (a, c) { var e, h; b = 0; J = "" + a; e = P(z()); "$" != z() && l(); b = J = null; return c && "[object Function]" == u.call(c) ? S((h = {}, h[""] = e, h), "", c) : e }
+            }
+        } r.runInContext = N; return r
+    } var K = typeof define === "function" && define.amd, F = { "function": !0, object: !0 }, G = F[typeof exports] && exports && !exports.nodeType && exports, k = F[typeof window] &&
+        window || this, t = G && F[typeof module] && module && !module.nodeType && "object" == typeof global && global; !t || t.global !== t && t.window !== t && t.self !== t || (k = t); if (G && !K) N(k, G); else { var L = k.JSON, Q = k.JSON3, M = !1, A = N(k, k.JSON3 = { noConflict: function () { M || (M = !0, k.JSON = L, k.JSON3 = Q, L = Q = null); return A } }); k.JSON = { parse: A.parse, stringify: A.stringify } } K && define(function () { return A })
+}).call(this);
+
+// 键盘事件处理库
 (function (r, v, f) {
     function w(a, b, g) { a.addEventListener ? a.addEventListener(b, g, !1) : a.attachEvent("on" + b, g) } function A(a) { if ("keypress" == a.type) { var b = String.fromCharCode(a.which); a.shiftKey || (b = b.toLowerCase()); return b } return p[a.which] ? p[a.which] : t[a.which] ? t[a.which] : String.fromCharCode(a.which).toLowerCase() } function F(a) { var b = []; a.shiftKey && b.push("shift"); a.altKey && b.push("alt"); a.ctrlKey && b.push("ctrl"); a.metaKey && b.push("meta"); return b } function x(a) {
         return "shift" == a || "ctrl" == a || "alt" == a ||
@@ -42,7 +122,7 @@
 
     // 默认设置
     var defConfig = {
-        isIndexCol:true // 是否包含序号列
+        isIndexCol: true // 是否包含序号列
     }
 
     // tableInput对象
@@ -61,13 +141,63 @@
         }
         return array;
     }
+    y2TableInput.prototype.relizeWidth = function(){
+        var headTr = this.getByClass("y2_tableInput_head_tr", "tr")[0];
+        var bodyTr = this.getByClass("y2_tableInput_body_tr", "tr")[0];
+        var footTr = this.getByClass("y2_tableInput_foot_tr", "tr")[0];
+        var headTds = headTr.getElementsByTagName("td");
+        var bodyTds = bodyTr.getElementsByTagName("td");
+        var footTds = footTr.getElementsByTagName("td");
+        var modalTds = this.config.modalTr.getElementsByTagName("td");
+        for (var i = 0; i < headTds.length; i++) {
+            var colIndex = headTds[i].getAttribute("data-colIndex");
+            if (colIndex && this.config.field[colIndex]) {
+                headTds[i].style.width = this.config.field[colIndex].width;
+                bodyTds[i].style.width = this.config.field[colIndex].width;
+                footTds[i].style.width = this.config.field[colIndex].width ;
+                modalTds[i].style.width = this.config.field[colIndex].width;
+            }
+        }
+
+    }
+    /**验证数据 */
+    y2TableInput.prototype.validateAll = function () {
+        var field = this.config.field;
+        var illArray = [];
+        var flag = true;
+        for (var i = 0; i < this.data.length; i++) {
+            for (var j = 0; j < field.length; j++) {
+                if (field[j].validation) {
+                    var tdFlag = validate(field[j].validation, this.data[i][field[j].field]);
+                    flag = flag && tdFlag;
+                    if (!tdFlag) {
+                        illArray.push({trIndex:i,colIndex:j});
+                    }
+                }
+                
+            }
+        }
+        if (illArray.length > 0) {
+            var tbody = this.getByClass("y2_tableInput_body", "tbody")[0];
+            var trs = tbody.getElementsByTagName("tr");
+            for (var i = 0; i < illArray.length; i++) {
+                var theTr = trs[illArray[i]["trIndex"]];
+                if (theTr) {
+                    var tds = theTr.getElementsByTagName("td");
+                    var theTd = tds[illArray[i]["colIndex"]];
+                    addClass(theTd,"y2_tableInput_illtd")
+                }
+            }
+        }
+        return flag;
+    }
     /**
      * 获取数据
      * @param {any} dataType 数据类型 1. '◇','◆' 拼接起来 2 json
      * @param {any} needArray 需要的数据及顺序
      */
     y2TableInput.prototype.getData = function (dataType, needArray) {
-        if (dataType === undefined) dataType = 1;
+        if (dataType === undefined) dataType = 'str';
         if (needArray === undefined) {
             var needArray = [];
             for (var i = 0; i < this.config.field.length; i++) {
@@ -75,7 +205,7 @@
             }
         }
         var str = "";
-        if (dataType == 1) {
+        if (dataType == 'str') {
             for (var i = 0, oLen = this.data.length; i < oLen; i++) {
                 for (var j = 0, iLen = needArray.length; j < iLen; j++) {
                     str += this.data[i][needArray[j]];
@@ -88,6 +218,9 @@
                 }
             }
         }
+        if (dataType == "json") {
+            str = JSON.stringify(this.data)
+        }
         return str;
     }
     // 创建表格工厂
@@ -95,8 +228,13 @@
         var obj = new y2TableInput();
         obj.config = extendObj(defConfig, config);
         Mousetrap.bind('del', function (e) {
-            if (obj.editingTr) {
-                deleteRow(obj, obj.editingTr.getAttribute("data-Index"));
+            if (obj.checkedTrArray && obj.checkedTrArray.length > 0 && confirm("是否删除这" + obj.checkedTrArray.length + "条数据?")) {
+                for (var i = 0; i < obj.checkedTrArray.length; i++) {
+                    deleteRow(obj, obj.checkedTrArray[i].getAttribute("data-Index"),true);                    
+                }
+                obj.checkedTrArray = [];
+                sortTable(obj);
+                
             }
         });
         config && obj.init();
@@ -261,8 +399,11 @@
             //序号列
             if (y2TI.config.isIndexCol) {
                 var td = y2CreateElement("td", { className: "y2_tableInput_head_index" });
-                td.setAttribute("data-readOnly", "true");
+                td.setAttribute("data-readOnly", "true");                
                 td.style.width = "30px";
+                td.onclick = function () {
+                    showMoreConfig(y2TI);
+                }
                 td.innerHTML = "<div style='width:100%'><div>";
                 tr.appendChild(td);
             }
@@ -271,9 +412,12 @@
                 td = y2CreateElement('td');
                 td.style.width = headConfig[i]["width"];
                 td.innerText = headConfig[i]["text"];
+                td.setAttribute("unselectable", "on");
+                td.setAttribute("data-colIndex", i);
                 tr.appendChild(td);
                 var lineLeft = y2CreateElement("div", { className: "y2_tableInput_line y2_tableInput_line_left" });
                 var lineRight = y2CreateElement("div", { className: "y2_tableInput_line y2_tableInput_line_right" });
+               
                 var ps, targetTd, isstretching;
                 // 缩放表格
                 td.onmousemove = function (e) {
@@ -290,13 +434,19 @@
                 }
                 //将鼠标移动事件绑定到document 这样即使鼠标移出浏览器也能监听到具体位置
                 document.onmousemove = function (e) {
+                    var wrapOffsetLeft = 0;
+                    var wrap = y2TI.node;
+                    while (wrap) {
+                        wrapOffsetLeft += wrap.offsetLeft || 0;
+                        wrap = wrap.offsetParent;
+                    }
                     e = e || window.event;
                     if (isstretching) {
-                        if (ps == "left" && (targetTd.clientWidth + targetTd.offsetLeft - e.clientX > 20)) {
-                            lineLeft.style.left = e.clientX + "px";
+                        if (ps == "left" && (targetTd.clientWidth + targetTd.offsetLeft - (e.clientX - wrapOffsetLeft) > 20)) {                           
+                            lineLeft.style.left = e.clientX - wrapOffsetLeft + "px";
                         }
-                        else if (ps == "right" && e.clientX - targetTd.offsetLeft > 20) {
-                            lineRight.style.left = e.clientX + "px";
+                        else if (ps == "right" && e.clientX - wrapOffsetLeft - targetTd.offsetLeft > 20) {
+                            lineRight.style.left = e.clientX - wrapOffsetLeft + "px";
                         }
                     }
                 }
@@ -306,15 +456,15 @@
                     // 先获取y2_tableInput_wrapper的父元素的offsetLeft的合计
                     var offsetParent = 0;
                     var pNode = this;
-                    while (pNode) {
+                    while (pNode && !hasClass(pNode,"y2_tableInput_wrapper")) {
                         offsetParent += pNode.offsetLeft || 0;
                         pNode = pNode.offsetParent;
                     }
                     if (this.style.cursor == "col-resize") {                        
                         lineLeft.style.left = offsetParent + "px";
                         lineRight.style.left = (offsetParent + this.clientWidth) + "px";
-                        document.body.appendChild(lineLeft);
-                        document.body.appendChild(lineRight);
+                        y2TI.node.appendChild(lineLeft);
+                        y2TI.node.appendChild(lineRight);
                         isstretching = true;
                         targetTd = this; 
                     }
@@ -328,12 +478,12 @@
                         while (targetTable && targetTable.nodeName.toLowerCase() != "table") {
                             targetTable = targetTable.parentNode;
                         }
-                        targetTable.style.width += (lineRight.style.left.replace('px', '') - lineLeft.style.left.replace('px', '') - 2) - targetTd.style.width.replace("px","") + 'px';
-                        targetTd.style.width = (lineRight.style.left.replace('px', '') - lineLeft.style.left.replace('px', '') - 2) + 'px'; // 2 是paddingleft的值
-                                              
+                        var newWidth = (lineRight.style.left.replace('px', '') - lineLeft.style.left.replace('px', '') - 2) - targetTd.style.width.replace("px", "");
+                        computeWidth(targetTd, newWidth, y2TI,ps);
+                                        
                         // 移除线条
-                        document.body.removeChild(lineLeft);
-                        document.body.removeChild(lineRight);
+                        y2TI.node.removeChild(lineLeft);
+                        y2TI.node.removeChild(lineRight);
                     }
                 } 
 
@@ -360,6 +510,7 @@
             tbody);
         for (var i = 0; i < data.length; i++) {
             var tr = modalTr.cloneNode(true);
+            if (i % 2 === 1) addClass(tr, "y2_tableInput_oddRow");
             tr.setAttribute("data-index", i);           
             var tds = tr.getElementsByTagName("td"),
                 datai = data[i],
@@ -408,6 +559,7 @@
         }
         var tds = tr.getElementsByTagName("td");
         setTdValue(tds[0], "合计");
+        
         for (var i = 1; i < tds.length; i++) {
             var td = tds[i];            
             var field = fieldConfig[td.getAttribute("data-colIndex")];
@@ -418,7 +570,39 @@
                 setTdValue(td,"");
             }
         }
+        if (!y2TI.config.hasSum) {
+            div.style.display = "none";
+        }
         return div;
+    }
+
+    /**
+     *  重新计算宽度
+     * @param {any} targetTd 目标td
+     * @param {any} newWidth 调整宽度
+     * @param {any} y2TI
+     * @param {any} ps  方向
+     */
+    function computeWidth(targetTd, newWidth, y2TI,ps) {
+        var colIdnex = targetTd.getAttribute("data-colIndex");
+        var anoIndex = colIdnex + (ps === "left" ? -1 : 1);
+        var field = y2TI.config.field;
+        if (field[anoIndex]) {
+            var oldWidth = field[anoIndex].width.replace("px", "") * 1 + field[colIdnex].width.replace("px", "") * 1;
+            var zWidth = field[colIdnex].width.replace("px", "") * 1 + newWidth;
+            var aWidth = (oldWidth - zWidth * 1);
+            if (zWidth < 20) {
+                zWidth = 20;
+                aWidth = oldWidth - 20;
+            }
+            if (aWidth < 20) {
+                aWidth = 20;
+                zWidth = oldWidth - 20;
+            }
+            field[colIdnex].width = zWidth + "px";
+            field[anoIndex].width = aWidth + "px";
+        }
+        y2TI.relizeWidth();
     }
 
     function getSum(fieldName, data) {
@@ -438,8 +622,10 @@
     function addRow(y2TI, type, index) {
         var newTr = y2TI.config.modalTr.cloneNode(true);
         var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
-        newTr.setAttribute("data-index", tbody.getElementsByTagName("tr").length);
-        toggelEditingTr(newTr, y2TI);
+        var length = tbody.getElementsByTagName("tr").length;
+        newTr.setAttribute("data-index", length);
+        if (length % 2 === 1) addClass(newTr, "y2_tableInput_oddRow");
+        toggleCheckedTr(newTr, y2TI);
         if (y2TI.config.isIndexCol) {
             newTr.getElementsByTagName("td")[0].innerHTML = "<div>" + (tbody.getElementsByTagName("tr").length + 1) + "</div>";
         }
@@ -464,24 +650,28 @@
     * 删减行
     * @param {any} y2TI：对象
     * @param {any} index:当前行位置
+    * @param {any} isBatch:是否有提示,批量删除是不需要提示
     */
-    function deleteRow(y2TI, index) {
+    function deleteRow(y2TI, index ,isBatch) {        
         if (index === undefined) return;
-        var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
-        var trs = tbody.getElementsByTagName("tr");        
-        y2TI.data.splice(index, 1);
-        tbody.removeChild(trs[index]);
-        if (y2TI.data.length === 0) {
-            addRow(y2TI, 0)
+        if (isBatch || confirm("确定删除第" + (index+1) + "行数据吗?")) {
+            var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
+            var trs = tbody.getElementsByTagName("tr");
+            y2TI.data.splice(index, 1);
+            tbody.removeChild(trs[index]);
+            if (y2TI.data.length === 0) {
+                addRow(y2TI, 0)
+            }
+            if (!isBatch) sortTable(y2TI);
         }
-        sortTable(tbody);
     }
 
     /**
      * 整理顺序
      * @param {any} tbody
      */
-    function sortTable(tbody) {
+    function sortTable(y2TI) {
+        var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
         var trs = tbody.getElementsByTagName("tr");
         for (var i = 0; i < trs.length; i++) {            
             var tr = trs[i];
@@ -519,12 +709,7 @@
         }
     }
 
-    function setTdValue(td,value) {
-        td.innerHTML = "";
-        var div = y2CreateElement("div", { className: "y2_tableInput_body_display" });
-        div.innerHTML = value;
-        td.appendChild(div);
-    }
+
 
     function onTableClick(e, y2TI) {
         onTdClick(e, y2TI);
@@ -537,20 +722,64 @@
             target = target.parentNode;
         }
         if (hasClass(target, "y2_tableInput_body_display")) target = target.parentNode;
-        toggelEditingTr(target.parentNode,y2TI);
+        if (e.ctrlKey) {
+            if (!y2TI.checkedTrArray) y2TI.checkedTrArray = [];
+            addClass(target.parentNode, "y2_tableInput_checkedTr");
+            var index = -1;
+            for (var i = 0; i < y2TI.checkedTrArray.length; i++) {
+                if (y2TI.checkedTrArray[i] == target.parentNode) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index === -1) y2TI.checkedTrArray.push(target.parentNode);
+            else {
+                y2TI.checkedTrArray.splice(index, 1)
+                removeClass(target.parentNode, "y2_tableInput_checkedTr");
+            }
+        } else if (e.shiftKey) {
+            if (!y2TI.checkedTrArray) y2TI.checkedTrArray = [];
+            var currIndex = target.parentNode.getAttribute("data-Index") * 1;
+            if (y2TI.checkedTrArray.length > 0) {
+                var lastTr = y2TI.checkedTrArray[y2TI.checkedTrArray.length - 1];
+                var lastIndex = lastTr.getAttribute("data-Index") * 1;
+                for (var i = 0; i < y2TI.checkedTrArray.length; i++) {
+                    removeClass(y2TI.checkedTrArray[i], "y2_tableInput_checkedTr");
+                }
+                y2TI.checkedTrArray = [];
+                var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
+                var trs = tbody.getElementsByTagName("tr");
+                console.log(trs);
+                if (lastIndex < currIndex) {
+                    currIndex = lastIndex;
+                    lastIndex = target.parentNode.getAttribute("data-Index") * 1;
+                }
+                for (var j = currIndex; j <= lastIndex; j++) {
+                    y2TI.checkedTrArray.push(trs[j]);
+                    addClass(trs[j], "y2_tableInput_checkedTr");
+                }
+                
+
+            }
+        } else {
+            toggleCheckedTr(target.parentNode, y2TI);
+        }
         if (!hasClass(target, "y2_tableInput_body_index")) {
             toggleTdStatus(target, "input", y2TI);
         }
     }
 
     // 将tr设置为选中状态
-    function toggelEditingTr(tr,y2TI) {
-        if (y2TI.editingTr) {
-           removeClass(y2TI.editingTr,"y2_tableInput_editingTr");
+    function toggleCheckedTr(tr, y2TI) {
+        if (!y2TI.checkedTrArray) y2TI.checkedTrArray = [];
+        for (var i = 0; i < y2TI.checkedTrArray.length; i++) {
+            removeClass(y2TI.checkedTrArray[i], "y2_tableInput_checkedTr");
         }
-        addClass(tr, "y2_tableInput_editingTr");
-        y2TI.editingTr = tr;
+        y2TI.checkedTrArray = [];
+        addClass(tr, "y2_tableInput_checkedTr");
+        y2TI.checkedTrArray.push(tr);
     }
+
 
     /**
      * 将焦点置于目标元素，使得该元素处于可编辑状态
@@ -562,8 +791,9 @@
         var ctype = target.getAttribute("data-ctype");
         var ele = null;
         target.innerHTML = "";
-        toggelEditingTr(target.parentNode, y2TI)
+        toggleCheckedTr(target.parentNode, y2TI)
         switch (ctype) {
+            case "choosePage":
             case "input":
                 ele = y2CreateElement("input", { className: "y2Input" });
                 ele.value = value;
@@ -571,9 +801,29 @@
                     var e = e || window.event;
                     var keyCode = e.keyCode;
                     if (keyCode == "13" || keyCode == "9") {
-                        setValue(target, this.value, y2TI);
-                        toggleTdStatus(target, "display", y2TI);
-                        moveCursor(target, "r", 1, y2TI);
+                        try {
+                            if (ctype == "choosePage" && keyCode == "13") {
+                                var path = y2TI.config.field[colIndex]["chooseConfig"]["path"];
+                                var reString = y2TI.config.field[colIndex]["chooseConfig"]["reString"].split(",");
+                                var win = window.showModalDialog(path, "", "scroll:yes;status:no;dialogWidth:800px;dialogHeight:600px");
+                                if (Object.prototype.toString.call(win) === "[object Array]") {
+                                    for (var i = 0; i < win.length; i++) {
+                                        if (reString[i]) {
+                                            setAllValue(getTd(target.parentNode, reString[i]), y2TI, win[i]);
+                                        }
+                                    }
+                                } else {
+                                    setValue(target, this.value, y2TI);
+                                }
+                                toggleTdStatus(target, "display", y2TI);
+                                moveCursor(target, "r", 1, y2TI);
+                            } else {
+                                setValue(target, this.value, y2TI);
+                                toggleTdStatus(target, "display", y2TI);
+                                moveCursor(target, "r", 1, y2TI);
+                            }
+                        } catch (e) {
+                        }
                         event.preventDefault ? event.preventDefault() : event.returnValue = false;
                     } else if (keyCode == "37") {// 左
                         var poistion = getTxt1CursorPosition(this)
@@ -597,15 +847,57 @@
                         setValue(target, this.value, y2TI);
                         toggleTdStatus(target, "display", y2TI);
                         moveCursor(target, "b", 1, y2TI);
+                    } else if (keyCode == "46") {
+                        deleteRow(y2TI, target.parentNode.getAttribute("data-Index"))
                     }
                    
                 }
                 ele.onblur = function () {
                     setValue(target, this.value, y2TI);
+                    
                     toggleTdStatus(target, "display", y2TI);
                 }
                 target.appendChild(ele);
                 ele.focus();
+                break;
+            case "date":
+                ele = y2CreateElement("input", { className: "y2Input" });
+                ele.value = value;
+                ele.onclick = function () {
+                    setday(this);
+                }
+                target.appendChild(ele);
+                setTimeout(function () { ele.click(); ele.focus(); }, 200)
+                window.DateCallBack = function () {
+                    setValue(target, ele.value, y2TI);
+                    toggleTdStatus(target, "display", y2TI, ele.value);
+                    moveCursor(target, "r", 1, y2TI);
+                }
+                ele.onkeydown = function (e) {
+                    var e = e || window.event;
+                    var keyCode = e.keyCode;
+                    if (keyCode == "13" || keyCode == "9") {
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "r", 1, y2TI);
+                        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                    } else if (keyCode == "37") {// 左
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "l", 1, y2TI);
+                    } else if (keyCode == "38") {// 上
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "t", 1, y2TI);
+                    } else if (keyCode == "39") {// 右
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "r", 1, y2TI);
+                    } else if (keyCode == "40") {// 下
+                        toggleTdStatus(target, "display", y2TI);
+                        moveCursor(target, "b", 1, y2TI);
+                    } else {
+                        event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                    }
+
+                }
+                
                 break;
             case 'select':
                 var bindData = null;
@@ -615,24 +907,246 @@
                         break;
                     }
                 }
-                
-                ele = buildSelect(bindData);
-                target.appendChild(ele);
-                $(ele).select2();
-                $(ele).val(value).trigger("change");;
-                $(ele).on("select2:close", function (e) {
-                    var value = $(ele).select2("val");
-                    var text = $(ele).select2('data')[0] && $(ele).select2('data')[0].text;
-                    setValue(target, value, y2TI);
-                    toggleTdStatus(target, "display", y2TI ,text);
-                    moveCursor(target, "r", 1, y2TI);
-                }) 
-                $(ele).select2("open");
+
+                ele = buildSelect(bindData, y2TI, target, value);
+               
+                //$(ele).select2();
+                //$(ele).val(value).trigger("change");;
+                //$(ele).on("select2:close", function (e) {
+                //    var value = $(ele).select2("val");
+                //    var text = $(ele).select2('data')[0] && $(ele).select2('data')[0].text;
+                //    setValue(target, value, y2TI);
+                //    toggleTdStatus(target, "display", y2TI ,text);
+                //    moveCursor(target, "r", 1, y2TI);
+                //}) 
+                //$(ele).select2("open");
                 break;
             default:
                 ele = y2CreateElement("input", { className: "y2Input" })
                 break;
         }      
+    }
+
+    /**
+     * 更多设置
+     * @param {any} y2TI
+     */
+    function showMoreConfig(y2TI) {
+        var diag = new Dialog();
+        var config = y2TI.config;
+        var field = config.field;
+        diag.Width = 800;
+        diag.Height = screen.availHeight - 250;
+        diag.Title = "更多设置";
+        var str = '';
+        str = '<div class="y2_tableInput_configdiv" style="height:' + (screen.availHeight - 400) + '">';
+        str += '<ul class="y2_tableInput_configul" sty>';
+        str += '<li><label>主要设置</label></li>';
+        for (var i = 0; i < field.length; i++) {
+            str += buildConfigLi(field[i],i);
+        }
+        str += '</ul></div>'
+        diag.InnerHtml = str;
+
+
+        //diag.OKEvent = function () {
+        //    var table = getByClassName(document, 'showConfigTable', 'table')[0];
+        //    var tbody = table.getElementsByTagName('tbody')[0];
+        //    var trList = tbody.getElementsByTagName('tr');
+        //    var isSaveWidth = obj._Config.isSaveWidth;
+        //    var array = [];
+        //    for (var i = 0; i < trList.length; i++) {
+        //        var tr = trList[i];
+        //        var typeSelect = tr.cells[4].getElementsByTagName('select')[0];
+        //        var nobj = {
+        //            name: tr.cells[0].innerText,
+        //            isShow: tr.cells[2].getElementsByTagName('input')[0].checked ? true : false,
+        //            fieldType: typeSelect.options[typeSelect.selectedIndex].value
+        //        };
+        //        if (isSaveWidth) nobj['width'] = tr.cells[1].getElementsByTagName('input')[0].value;
+        //        array.push(nobj);
+        //    }
+        //    var perConfig = {
+        //        itemList: array,
+        //        isSaveWidth: isSaveWidth
+        //    };
+        //    Ajax.post(obj._Config.path.save, 'methodType=save&tableId=' + obj._Config.id + '&href=' + location.pathname + location.search + '&config=' + JSON.stringify(perConfig), function () {
+
+        //    })
+
+        //    diag.close();
+        //    if (isSaveWidth) {
+        //        obj._Config.isFixedWidth = true;
+        //    } else {
+        //        getWidthObj(obj);
+        //    }
+        //    obj._Config.itemList = array;
+
+        //    obj.PageTurnTo(1, true);
+
+        //    obj.getElement('theaddiv', 'div')[0].scrollLeft = obj.getElement('bodytablediv', 'div')[0].scrollLeft = 0;
+        //    if (obj._Config.sumConfig.isShow) obj.getElement('sumDiv', 'div')[0].scrollLeft = 0;
+        //    //存储设置
+        //    //var ajData = deepCloneObj(obj._Config);
+        //    //ajData.data = null;
+        //    //ajData.searchedData = null;
+        //    //ajData.currentData = null;
+
+
+        //};//点击确定后调用的方法
+        diag.show();
+
+        //var table = getByClassName(document, 'showConfigTable', 'table')[0];
+        //table.onclick = function (e) {
+        //    var e = e || window.event;
+        //    var target = e.srcElement || e.target;
+        //    var tr = target;
+        //    if (tr && tr.nodeName.toUpperCase() != 'TR') {
+        //        tr = tr.parentNode;
+        //    }
+        //    if (target.nodeName.toUpperCase() == 'I') {
+        //        var tr = target.parentNode.parentNode;
+        //        var tbody = tr.parentNode;
+        //        var oldtr = '';
+        //        if (hasClass(target, 'topre')) {
+        //            oldtr = tr.previousElementSibling || tr.previousSibling;
+        //            oldtr && tbody.insertBefore(tr, oldtr);
+        //        }
+        //        if (hasClass(target, 'tonext')) {
+        //            oldtr = tr.nextElementSibling || tr.nextSibling;
+        //            oldtr && tbody.insertBefore(oldtr, tr);
+        //        }
+        //        if (hasClass(tr, 'oddrow')) {
+        //            removeClass(tr, 'oddrow');
+        //            addClass(tr, 'evenrow');
+        //            if (oldtr) {
+        //                removeClass(oldtr, 'evenrow');
+        //                addClass(oldtr, 'oddrow');
+        //            }
+        //        } else {
+        //            removeClass(tr, 'evenrow');
+        //            addClass(tr, 'oddrow');
+        //            if (oldtr) {
+        //                removeClass(oldtr, 'oddrow');
+        //                addClass(oldtr, 'evenrow');
+        //            }
+        //        }
+
+
+
+        //    }
+        //    else if (target.nodeName.toUpperCase() == 'A' && hasClass(target, 'isPersist')) {
+        //        var isPersist = hasClass(target, 'persisted');
+        //        if (!isPersist) {
+        //            addClass(target, 'persisted');
+        //            obj._Config.isSaveWidth = true;
+        //        } else {
+        //            removeClass(target, 'persisted');
+        //            obj._Config.isSaveWidth = false;
+        //        }
+        //    }
+        //    if (tr) {
+        //        var trList = tr.parentNode.getElementsByTagName('tr');
+        //        for (var i = 0; i < trList.length; i++) {
+        //            removeClass(trList[i], 'activeTr');
+        //        }
+        //        addClass(tr, 'activeTr');
+
+        //    }
+        //}
+    }
+
+    /**
+     * 配置设置项
+     * @param {any} config
+     */
+    function buildConfigLi(config,index) {
+        var str = "<li>" +
+            "<label>" + config.text + "</label>" +
+            "<table>" +
+            "<tbody>" +
+            "<tr>" +
+            "<td class=\"label\">字段名</td>" +
+            "<td class=\"value\"><input type=\"text\" value=\"" + config["text"] + "\" /></td>" +
+            "<td class=\"label\">数据库字段</td>" +
+            "<td class=\"value\"><input type=\"text\" value=\"" + config["field"] + "\" /></td>" +
+            "<td class=\"label\">类型</td>" +
+            "<td class=\"value\"><select>" +
+            "<option value=\"input\" " + (config["cType"] === "input" ? "selected=\"true\"":"") + ">输入框</option>" +
+            "<option value=\"date\" " + (config["cType"] === "date" ? "selected=\"true\"" : "") + ">日期</option>" +
+            "<option value=\"select\" " + (config["cType"] === "select" ? "selected=\"true\"" : "") + ">下拉选择</option>" +
+            "<option value=\"choose\" " + (config["cType"] === "choose" ? "selected=\"true\"" : "") + ">弹框选择</option>" +
+            "</select></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td class=\"label\">宽度</td>" +
+            "<td class=\"value\"><input type=\"text\" value=\"" + config["width"] + "\" /></td>" +
+            "<td class=\"label\">默认值</td>" +
+            "<td class=\"value\"><input type=\"text\" value=\"" + (config["defValue"] || "") + "\" /></td>" +
+            "<td class=\"label\">只读</td>" +
+            "<td class=\"value\"><select>" +
+            "<option value=\"true\" " + (config["readOnly"] ? "selected=\"true\"" : "") + ">是</option>" +
+            "<option value=\"false\" " + (!config["readOnly"] ? "selected=\"true\"" : "") + ">否</option>" +
+            "</select></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td class=\"label\">位置</td>" +
+            "<td class=\"value\"><input type=\"text\" value=\"" + index + "\" /></td>" +
+            "<td class=\"label\">是否合计</td>" +
+            "<td class=\"value\"><select>" +
+            "<option value=\"true\" " + (config["isSum"] ? "selected=\"true\"" : "") + ">是</option>" +
+            "<option value=\"false\" " + (!config["isSum"] ? "selected=\"true\"" : "") + ">否</option>" +
+            "</select></td>" +
+            "<td class=\"label\">是否隐藏</td>" +
+            "<td class=\"value\"><select>" +
+            "<option value=\"true\" " + (config["hidden"] ? "selected=\"true\"" : "") + ">是</option>" +
+            "<option value=\"false\" " + (!config["hidden"] ? "selected=\"true\"" : "") + ">否</option>" +
+            "</select></td>" +
+            "</tr>" +
+        "</table></li>";
+        return str;
+    }
+
+    /**
+     * 获取目标td
+     * @param {any} y2TI
+     * @param {any} trIndex
+     * @param {any} colIndex
+     */
+    function getTd(tr, colIndex) {
+        var tds = tr.getElementsByTagName("td");
+        var td = null;
+        for (var i = 0; i < tds.length; i++) {
+            if (tds[i].getAttribute("data-colIndex") == colIndex) {
+                td = tds[i];
+                break;
+            }
+        }
+        return td;
+    }
+
+    /**
+     * 设置值和显示值
+     * @param {any} target
+     * @param {any} value 值
+     * @param {any} y2TI
+     * @param {any} text 显示值
+     */
+    function setAllValue(target, y2TI, value,text) {
+        setValue(target, value, y2TI);
+        setTdValue(target, text === undefined ? value :text);
+    }
+
+    /**
+     * 更新显示值
+     * @param {any} td
+     * @param {any} value
+     */
+    function setTdValue(td, value) {
+        td.innerHTML = "";
+        var div = y2CreateElement("div", { className: "y2_tableInput_body_display" });
+        div.innerHTML = value;
+        td.appendChild(div);
     }
 
     /**
@@ -644,8 +1158,7 @@
      */
     function setValue(target, value, y2TI) {
         var tr = target.parentNode;
-        var index = tr.getAttribute("data-Index");
-        
+        var index = tr.getAttribute("data-Index");        
         var colIndex = target.getAttribute("data-colIndex");
         var field = target.getAttribute("data-field");
         var fieldConfig = y2TI.config.field[colIndex];
@@ -656,6 +1169,7 @@
             }
         }
         y2TI.data[index][field] = value;
+        removeClass(target,"y2_tableInput_illtd")
         //自定义事件
         if (fieldConfig["event"]) {
             for (var eventName in fieldConfig["event"]) {
@@ -833,20 +1347,133 @@
      * 
      */
 
-    function buildSelect(bindData,y2TI) {
-        var ele = y2CreateElement("select", { className: "y2Select" });
+    function buildSelect(bindData, y2TI,target,value) {        
         if (bindData) {
+            var outSpan = y2CreateElement("span", { className: "y2_select_warpper" });
+            var div = y2CreateElement("div", { className: "y2_select" });
+            var span = y2CreateElement("span", { className: "y2_select_text" });
             for (var i = 0; i < bindData.length; i++) {
-                var option = y2CreateElement("option");
-                option.value = lrTrim(bindData[i]["value"]);
-                option.innerHTML = lrTrim(bindData[i]["label"]);
-                ele.appendChild(option);
+                if (lrTrim(bindData[i]["value"]) == lrTrim(value)) {
+                    span.innerHTML = bindData[i]["label"] || "";
+                    break;
+                }
+            }
+            
+            var optionsDiv = y2CreateElement("div", { className: "y2_select_opinions" });
+            var searchDiv = y2CreateElement("div", { className: "y2_select_search" });
+            var searchInput = y2CreateElement("input", { className: "y2_select_search_input" });
+            searchDiv.appendChild(searchInput);
+            optionsDiv.appendChild(searchDiv);
+            var ul = createLiList(bindData, null, target, y2TI);
+            optionsDiv.appendChild(ul);
+            div.appendChild(span);
+            div.appendChild(optionsDiv);
+            
+            
+            outSpan.appendChild(div);
+            target.appendChild(outSpan);
+            searchInput.focus();
+            searchInput.onkeydown = function (e) {
+                e = e || event;
+                var keyCode = e.keyCode;
+                if (keyCode == "13" || keyCode == "9") {
+                    toggleTdStatus(target, "display", y2TI, span.innerHTML);
+                    moveCursor(target, "r", 1, y2TI);
+                    event.preventDefault ? event.preventDefault() : event.returnValue = false;
+                } else if (keyCode == "37") {// 左
+                    var poistion = getTxt1CursorPosition(this)
+                    if (poistion == 0) {
+                        toggleTdStatus(target, "display", y2TI, span.innerHTML);
+                        moveCursor(target, "l", 1, y2TI);
+                    }
+                } else if (keyCode == "38") {// 上
+                    toggleTdStatus(target, "display", y2TI,span.innerHTML);
+                    moveCursor(target, "t", 1, y2TI);
+                } else if (keyCode == "39") {// 右
+                    var poistion = getTxt1CursorPosition(this)
+                    if (!this.value || this.value.length === poistion) {
+                        toggleTdStatus(target, "display", y2TI, span.innerHTML);
+                        moveCursor(target, "r", 1, y2TI);
+                    }
+                } else if (keyCode == "40") {// 下
+                    ul.getElementsByTagName("li")[0].focus();
+                    ul.getElementsByTagName("li")[0].style.backgroundColor = "#ccc";
+                    stopBubble(e)
+                } 
+            }
+            searchInput.onkeyup = function (e) {
+                    var value = this.value;
+                    e = e || event;
+                    if (e.keyCode != "40") {
+                        var newdata = [];
+                        ul.innerHTML = "";
+                        for (var i = 0; i < bindData.length; i++) {
+                            if (bindData[i]["label"].toString().toUpperCase().indexOf(value.toString().toUpperCase()) > -1) {
+                                newdata.push(bindData[i]);
+                            }
+                        }
+                        createLiList(newdata, ul, target, y2TI);
+                    }
+
+                }
+            //for (var i = 0; i < bindData.length; i++) {
+            //    var option = y2CreateElement("option");
+            //    option.value = lrTrim(bindData[i]["value"]);
+            //    option.innerHTML = lrTrim(bindData[i]["label"]);
+            //    ele.appendChild(option);
+            //}
+            return outSpan;
+        }
+
+        return outSpan;
+    }
+
+
+    function createLiList(data, ul, target, y2TI) {
+        var ul = ul || y2CreateElement("ul", { className: "y2_select_ul" });
+        ul.innerHTML = "";
+        if (data) {           
+            for (var i = 0; i < data.length; i++) {
+                var li = document.createElement("li");
+                li.setAttribute("data-value", data[i]["value"].toString());
+                li.innerHTML = data[i]["label"].toString();
+                li.setAttribute("tabIndex", i);
+                li.onclick = function () {
+                    var value = this.getAttribute("data-value").toString();
+                    var label = this.innerHTML;
+                    setValue(target, value, y2TI);
+                    toggleTdStatus(target, "display", y2TI, label);
+                    moveCursor(target, "r", 1, y2TI);
+                }
+                li.onkeydown = function (e) {
+
+                    e = e || event;
+                    if (e.keyCode == 13) {
+                        this.click();
+                        stopBubble(e);
+                    } else if (e.keyCode == 38) {
+
+                        var target = this.previousElementSibling || this.previousSibling;
+                        if (target) {
+                            this.style.backgroundColor = "#FFF";
+                            target.focus();
+                            target.style.backgroundColor = "#ccc";
+                        }
+                        stopBubble(e);
+                    } else if (e.keyCode == 40) {
+                        var target = this.nextElementSibling || this.nextSibling;
+                        if (target) {
+                            this.style.backgroundColor = "#FFF";
+                            target.focus();
+                            target.style.backgroundColor = "#ccc";
+                        }
+                        stopBubble(e);
+                    }
+                }
+                ul.appendChild(li);
             }
         }
-        //ele.onselect = function () {
-        //    alert(1)
-        //}
-        return ele;
+        return ul;
     }
     /**
      *  基础方法
@@ -1015,4 +1642,16 @@
             elements.className = elements.className.replace(new RegExp("(\\s|^)" + cName + "(\\s|$)"), " ");
         };
     };
+
+
+    function stopBubble(e) {
+        if (e && e.stopPropagation) { //非IE 
+            e.stopPropagation();
+
+        } else { //IE 
+            e.cancelBubble = true;
+            e.returnValue = false;
+        }
+        (e.returnValue && (e.returnValue = false)) || (e.preventDefault && e.preventDefault());
+    }
 })(window)
