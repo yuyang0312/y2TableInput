@@ -229,9 +229,17 @@
         obj.config = extendObj(defConfig, config);
         Mousetrap.bind('del', function (e) {
             if (obj.checkedTrArray && obj.checkedTrArray.length > 0 && confirm("是否删除这" + obj.checkedTrArray.length + "条数据?")) {
+                var sortArray = [];
                 for (var i = 0; i < obj.checkedTrArray.length; i++) {
-                    deleteRow(obj, obj.checkedTrArray[i].getAttribute("data-Index"),true);                    
+                    sortArray.push(obj.checkedTrArray[i].getAttribute("data-Index") * 1)                                      
                 }
+                sortArray = sortArray.sort(function (a, b) {
+                    return a - b;
+                });
+                for (var i = sortArray.length - 1; i > -1; i--) {
+                    deleteRow(obj, sortArray[i] , true);
+                }
+                  
                 obj.checkedTrArray = [];
                 sortTable(obj);
                 
@@ -537,7 +545,98 @@
         div[1].onclick = function (e) {
             onTableClick(e, y2TI);
         }
+        tbody.onpaste = function (e) {
+            var str = getClipboard();
+            if (str != null) {
+                var e = e || window.event;
+                var target = e.srcElement || e.target;
+                var theTd = target.parentNode;
+                var theTr = theTd.parentNode;
+                var theTbody = theTr.parentNode;
+                var trDetailArry = str.split('\n');
+                var index = theTr.getAttribute("data-index") * 1;
+                var field = y2TI.config.field;
+                var colIndex = theTd.getAttribute("data-colIndex") * 1;
+                var data = y2TI.data;
+                if (trDetailArry.length > 1) {
+                   
+                    if (confirm('是否复制多行数据？')) {
+                        var flag = false;
+                        var trs = theTbody.getElementsByTagName("tr");
+                        for (var i = 0, len = trDetailArry.length; i < len; i++) {
+                            if (trDetailArry[i]) {
+                                var tdDetailArry = trDetailArry[i].split('\t');
+                                var arrayIndex = 0;
+                                if (!data[index + i]) {
+                                    //addRow(y2TI, 0);
+                                    var tr = y2TI.config.modalTr.cloneNode(true);
+                                    tr.getElementsByTagName("td")[0].innerHTML = (index + i + 1);
+                                    tr.setAttribute("data-index", index + i);
+                                    if ((index + i) % 2 == 1) addClass(tr, "y2_tableInput_oddRow");
+                                    data[index + i] = deepCloneObj(y2TI.config.modalData);
+                                    flag = true;
+                                } else {
+                                    tr = trs[index + i];
+                                    
+                                }
+                                for (var j = colIndex; j < field.length && arrayIndex < tdDetailArry.length; j++) {
+                                    if (!field[j].readOnly && !field.hidden) {
+                                        var fieldName = field[j]["field"];
+                                        data[index + i][fieldName] = tdDetailArry[arrayIndex] || "";
+                                        arrayIndex++;
+                                    }
+                                }
+                               
+                                fillTr(data[index + i], tr, y2TI);
+                                flag && theTbody.appendChild(tr);
+                            }
+                        }
+                        //sortTable(y2TI);
+                        initFoot(y2TI);
+                        y2TI.validateAll();
+                        return false;
+                    }
+                   
+                }
+
+            }
+
+        }
         return div[0];
+    }
+
+    /**
+     * 更新tr数据
+     * @param {any} data
+     * @param {any} tr
+     * @param {any} y2TI
+     */
+    function fillTr(data, tr, y2TI) {
+        var field = y2TI.config.field;
+        var tds = tr.getElementsByTagName("td");
+        for (var i = 0; i < tds.length; i++) {
+            var fieldName = tds[i].getAttribute("data-field");
+            var colIndex = tds[i].getAttribute("data-colindex");
+            if (fieldName && colIndex) {
+                setTdValue(tds[i], getLabel(data[fieldName], field[colIndex]));                
+            }
+        }
+
+    }
+
+    /**
+     * 根据值取出显示值
+     * @param {any} value
+     * @param {any} field
+     */
+    function getLabel(value, field) {
+        var data = field.bindData;
+        if (!data) {
+            return value;
+        }
+        if (getObjFormArray(data, "value", value) > -1) {
+            return data[getObjFormArray(data, "value", value)]["label"];
+        }
     }
 
     // 创建合计
@@ -616,33 +715,55 @@
     /**
      * 增加行
      * @param {any} y2TI：对象
-     * @param {any} type:增加类型 0:最末尾插入,1:本行下方插入
-     * @param {any} index:当前行位置
+     * @param {any} type:增加类型 0:最末尾插入,1:本行下方插入,2:本行上方插入
+     * @param {any} tr:当前行
+     * @param {any} isCopy:是否复制当前行
      */
-    function addRow(y2TI, type, index) {
+    function addRow(y2TI, type, tr,isCopy) {
         var newTr = y2TI.config.modalTr.cloneNode(true);
-        var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
-        var length = tbody.getElementsByTagName("tr").length;
-        newTr.setAttribute("data-index", length);
-        if (length % 2 === 1) addClass(newTr, "y2_tableInput_oddRow");
-        toggleCheckedTr(newTr, y2TI);
-        if (y2TI.config.isIndexCol) {
-            newTr.getElementsByTagName("td")[0].innerHTML = "<div>" + (tbody.getElementsByTagName("tr").length + 1) + "</div>";
+        var newData = deepCloneObj(y2TI.config.modalData);
+        if (isCopy) {
+            newTr = tr.cloneNode(true);
+            newData = deepCloneObj(y2TI.data[tr.getAttribute("data-index")]);
         }
-        if (type === 0) {
-            y2TI.data.push(deepCloneObj(y2TI.config.modalData));
+        var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];  
+        var index = -1;
+        if (type == 0) {
+            y2TI.data.push(newData);
             tbody.appendChild(newTr);
+            index = tbody.getElementsByTagName("tr").length - 1;
         }
-
-        //检查是否有复制上列值
-        var tds = newTr.getElementsByTagName("td");
-        for (var i = 0; i < tds.length; i++) {
-            if (tds[i].getAttribute("data-copy") == "1") {
-                var value = y2TI.data[y2TI.data.length - 2][tds[i].getAttribute("data-field")];
-                y2TI.data[y2TI.data.length - 1][tds[i].getAttribute("data-field")] = value;
-                setTdValue(tds[i], value);
+        else if (type == 1) {
+            index = tr.getAttribute("data-index") * 1;
+            y2TI.data.splice(index + 1, 0, newData);
+            insertAfter(newTr, tr);
+            index++;
+        } else if (type == 2) {
+            index = tr.getAttribute("data-index") * 1;
+            y2TI.data.splice(index, 0, newData);
+            tbody.insertBefore(newTr, tr);           
+        }
+        newTr.setAttribute("data-index", index);
+        if (index % 2 === 1) addClass(newTr, "y2_tableInput_oddRow");
+        if (!isCopy) {
+            //检查是否有复制上列值
+            var tds = newTr.getElementsByTagName("td");
+            for (var i = 0; i < tds.length; i++) {
+                if (tds[i].getAttribute("data-copy") == "1") {
+                    var value = y2TI.data[index - 1][tds[i].getAttribute("data-field")];
+                    y2TI.data[index][tds[i].getAttribute("data-field")] = value;
+                    setTdValue(tds[i], value);
+                }
             }
         }
+        if (y2TI.config.isIndexCol) {
+            newTr.getElementsByTagName("td")[0].innerHTML = "<div>" + (index + 1) + "</div>";
+        }
+        toggleCheckedTr(newTr, y2TI);
+        if (type != 0) {
+            sortTable(y2TI);
+        }
+        adjustTableHeight(y2TI);
         return newTr;
     }
 
@@ -664,6 +785,7 @@
             }
             if (!isBatch) sortTable(y2TI);
         }
+        adjustTableHeight(y2TI);
     }
 
     /**
@@ -675,14 +797,20 @@
         var trs = tbody.getElementsByTagName("tr");
         for (var i = 0; i < trs.length; i++) {            
             var tr = trs[i];
-            if (tr.getAttribute("data-index") != i) {               
+           //if (tr.getAttribute("data-index") != i ) {               
                 tr.setAttribute("data-index", i);
                 var first = tr.getElementsByTagName("td")[0];
-                if (first && hasClass(first, "y2_tableInput_body_index")){
-                    first.innerHTML = i + 1;
+            if (first && hasClass(first, "y2_tableInput_body_index")) {
+                first.innerText = i + 1;
                 }
+            //}
+            if (i % 2 == 1) {
+                addClass(tr, "y2_tableInput_oddRow");
+            } else {
+                removeClass(tr, "y2_tableInput_oddRow");
             }
         }
+        adjustTableHeight(y2TI);
     }
 
 
@@ -749,7 +877,6 @@
                 y2TI.checkedTrArray = [];
                 var tbody = y2TI.getByClass("y2_tableInput_body", "tbody")[0];
                 var trs = tbody.getElementsByTagName("tr");
-                console.log(trs);
                 if (lastIndex < currIndex) {
                     currIndex = lastIndex;
                     lastIndex = target.parentNode.getAttribute("data-Index") * 1;
@@ -766,6 +893,30 @@
         }
         if (!hasClass(target, "y2_tableInput_body_index")) {
             toggleTdStatus(target, "input", y2TI);
+        }
+    }
+
+    /**
+     * 中间内容有一个高度，超过这个高度生成滚动条，低于这个高度去掉滚动条
+     * @param {any} y2TI
+     */
+    function adjustTableHeight(y2TI) {
+        var head = y2TI.getByClass("y2_tableInput_head_div", "div")[0];
+        var bodydiv = y2TI.getByClass("y2_tableInput_body_div", "div")[0];
+        var foot = y2TI.getByClass("y2_tableInput_foot_div", "div")[0];
+        var table = y2TI.getByClass("y2_tableInput_body_table ", "table")[0];
+        if (table) {
+            if (table.offsetHeight > y2TI.config.height) {
+                bodydiv.style.height = y2TI.config.height + "px";
+                bodydiv.style.overflow = "auto";
+                head.style.borderRight = "17px solid #F0F0F0";
+                foot.style.borderRight = "17px solid #F0F0F0";
+            }
+            if (table.offsetHeight <= y2TI.config.height) {
+                bodydiv.style.height = "auto";
+                head.style.borderRight = "none";
+                foot.style.borderRight = "none";
+            }
         }
     }
 
@@ -835,6 +986,11 @@
                     } else if (keyCode == "38") {// 上
                         setValue(target, this.value, y2TI);
                         toggleTdStatus(target, "display", y2TI);
+                        if (e.ctrlKey) {
+                            addRow(y2TI, 2, target.parentNode)
+                        } else if (e.altKey) {
+                            addRow(y2TI, 2, target.parentNode,true)
+                        }
                         moveCursor(target, "t", 1, y2TI);
                     } else if (keyCode == "39") {// 右
                         var poistion = getTxt1CursorPosition(this)
@@ -846,6 +1002,11 @@
                     } else if (keyCode == "40") {// 下
                         setValue(target, this.value, y2TI);
                         toggleTdStatus(target, "display", y2TI);
+                        if (e.ctrlKey) {
+                            addRow(y2TI, 1, target.parentNode)
+                        } else if (e.altKey) {
+                            addRow(y2TI, 1, target.parentNode, true)
+                        }
                         moveCursor(target, "b", 1, y2TI);
                     } else if (keyCode == "46") {
                         deleteRow(y2TI, target.parentNode.getAttribute("data-Index"))
@@ -1145,8 +1306,9 @@
     function setTdValue(td, value) {
         td.innerHTML = "";
         var div = y2CreateElement("div", { className: "y2_tableInput_body_display" });
-        div.innerHTML = value;
+        div.innerText = value || "";
         td.appendChild(div);
+        //td.innerHTML = value || "";
     }
 
     /**
@@ -1501,6 +1663,17 @@
         return index;
     }
 
+    function insertAfter(newElement, targetElement) {
+        var parent = targetElement.parentNode;
+        //如果要插入的目标元素是其父元素的最后一个元素节点，直接插入该元素
+        //否则，在目标元素的下一个兄弟元素之前插入
+        if (parent.lastChild == targetElement) {
+            parent.appendChild(targetElement);
+        } else {
+            parent.insertBefore(newElement, targetElement.nextSibling);
+        }
+    }
+
     function isNullOrEmptyArray(array) {
         return !(array && array.length > 0)
     }
@@ -1520,6 +1693,7 @@
     }
     // 去除前后空格
     function lrTrim(str) {
+        if (!str) return "";
         return str.replace(/^\s+|\s+$/g, "")
     }
 
@@ -1594,6 +1768,25 @@
         return n.nextElementSibling || n.nextSibling;
     }
 
+    /**
+     * 从数组中查询对象
+     * @param {any} array
+     * @param {any} name
+     * @param {any} value
+     */
+    function getObjFormArray(array, name, value) {
+        var index = -1;
+        if (array) {
+            for (var i = 0; i < array.length; i++) {
+                if (lrTrim(array[i][name]) == lrTrim(value)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
+    }
+
 
     // 创建元素
     function y2CreateElement(tag,attr,props){
@@ -1607,6 +1800,38 @@
                 ele.setAttribute(key,props);
             }
         return ele;
+    }
+
+    function getClipboard() {
+        if (window.clipboardData) {
+            return (window.clipboardData.getData('Text'));
+        }
+        else if (window.netscape) {
+            netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+            var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+            if (!clip) return;
+            var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+            if (!trans) return;
+            trans.addDataFlavor('text/unicode');
+            clip.getData(trans, clip.kGlobalClipboard);
+            var str = new Object();
+            var len = new Object();
+            try {
+                trans.getTransferData('text/unicode', str, len);
+            }
+            catch (error) {
+                return null;
+            }
+            if (str) {
+                if (Components.interfaces.nsISupportsWString) str = str.value.QueryInterface(Components.interfaces.nsISupportsWString);
+                else if (Components.interfaces.nsISupportsString) str = str.value.QueryInterface(Components.interfaces.nsISupportsString);
+                else str = null;
+            }
+            if (str) {
+                return (str.data.substring(0, len.value / 2));
+            }
+        }
+        return null;
     }
 
     // 链式添加元素 
